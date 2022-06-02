@@ -1,0 +1,54 @@
+DB 300000 Records
+Fields {
+  name
+  slug
+  authorName
+  authorSlug
+  imagePathRaw
+  status
+  categories
+  tags
+  chapterPathRaw
+  outsideChaptersLength
+  insideChaptersLength
+  hasChapterNeedContent
+  outsideSrc
+  outsideSVC,
+  language
+}
+
+chapter.json
+[{
+  storySlug
+  index
+  name
+  slug
+  contentPathRaw
+  outsideSrc
+  outsideSVC
+}]
+
+/** update info */
+/** update chapters */
+if (db.outsideChaptersLength === db.insideChaptersLength) {
+  db.outsideSVC(db.outsideSrc)
+  /**
+   * update db.outsideChaptersLength
+   * update (chapterPathGit) chapter.jon
+   * set db.hasChapterNeedContent = true
+   */
+}
+// -------------------------------------------
+itemNeedContent = []
+if (db.hasChapterNeedContent) {
+  items from chapter.json
+  for(item of items) {
+    if(!item.contentPathRaw) {
+      itemNeedContent.push({
+        ...item,
+        db
+      })
+      /* can update here */
+    }
+  }
+}
