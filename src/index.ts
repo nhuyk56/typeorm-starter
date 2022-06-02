@@ -32,8 +32,8 @@ const main = async () => {
     story.outsideChaptersLength = faker.datatype.number(),
     story.insideChaptersLength = faker.datatype.number(),
     story.hasChapterNeedContent = faker.datatype.boolean(),
-    story.outsideSrc = 'outsideSrc',
-    story.outsideSVC = 'outsideSVC',
+    story.outsideSrc = faker.name.findName(),
+    story.outsideSVC = faker.name.findName(),
     story.language = 'vi'
     await storyRepository.save(story)
     console.log(`save story: ${index}`)
