@@ -24,11 +24,11 @@ export class Story {
     @Column()
     status: string
 
-    @Column()
-    categories: string
+    @Column("simple-array")
+    categories: string[]
 
-    @Column()
-    tags: string
+    @Column("simple-array")
+    tags: string[]
 
     @Column()
     chapterPathRaw: string

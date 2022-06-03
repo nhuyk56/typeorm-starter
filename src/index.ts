@@ -18,6 +18,12 @@ const main = async () => {
   // console.log("Here you can setup and run express / fastify / any other framework.")
 
   const storyRepository = AppDataSource.getRepository(Story)
+
+  // // clear
+  // const stories1 = await storyRepository.find()
+  // console.log(`will clear ${stories1.length} stories`)
+  // await storyRepository.clear()
+
   for (let index = 0; index < 300000; index++) {
     const story = new Story();
     story.name = faker.name.findName(),
@@ -26,8 +32,8 @@ const main = async () => {
     story.authorSlug = story.name.replace(/ /, '-').toLowerCase(),
     story.imagePathRaw = faker.internet.url(),
     story.status = faker.internet.httpStatusCode().toString(),
-    story.categories = JSON.stringify([faker.name.findName()]),
-    story.tags = JSON.stringify([faker.name.findName()]),
+    story.categories = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
+    story.tags = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
     story.chapterPathRaw = faker.internet.url(),
     story.outsideChaptersLength = faker.datatype.number(),
     story.insideChaptersLength = faker.datatype.number(),
@@ -39,8 +45,11 @@ const main = async () => {
     console.log(`save story: ${index}`)
   }
 
+  console.time('storyRepository.find')
   const stories = await storyRepository.find()
-  console.log("Loaded stories: ", stories)
+  // console.log("Loaded stories: ", stories)
+  console.timeEnd('storyRepository.find')
+  console.log('storyRepository.find', stories.length)
 
   // const user = new User();
   // user.firstName = 'Timber';
