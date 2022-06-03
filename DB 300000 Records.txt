@@ -14,7 +14,8 @@ Fields {
   hasChapterNeedContent
   outsideSrc
   outsideSVC,
-  language
+  language,
+  updateFields: []
 }
 
 chapter.json
@@ -28,7 +29,13 @@ chapter.json
   outsideSVC
 }]
 
+/** create info */
+site craw stories >> init record
+user request >> site craw story >> init record
+
 /** update info */
+db >> site craw stories >> update info >> push fields change 2 updateFields
+
 /** update chapters */
 if (db.outsideChaptersLength === db.insideChaptersLength) {
   db.outsideSVC(db.outsideSrc)
