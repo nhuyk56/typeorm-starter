@@ -24,10 +24,10 @@ export class Story {
     @Column()
     status: string
 
-    @Column("simple-array")
+    @Column({ type: 'text', array: true, nullable: true })
     categories: string[]
 
-    @Column("simple-array")
+    @Column({ type: 'text', array: true, nullable: true })
     tags: string[]
 
     @Column()

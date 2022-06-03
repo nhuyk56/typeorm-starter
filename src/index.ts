@@ -1,6 +1,7 @@
 import { AppDataSource } from "./data-source"
 import { faker } from '@faker-js/faker';
 import { Story } from "./entity/Story";
+import { In } from "typeorm";
 
 const main = async () => {
   // console.log("Inserting a new user into the database...")
@@ -24,32 +25,38 @@ const main = async () => {
   // console.log(`will clear ${stories1.length} stories`)
   // await storyRepository.clear()
 
-  for (let index = 0; index < 300000; index++) {
-    const story = new Story();
-    story.name = faker.name.findName(),
-    story.slug = story.name.replace(/ /, '-').toLowerCase(),
-    story.authorName = faker.name.findName(),
-    story.authorSlug = story.name.replace(/ /, '-').toLowerCase(),
-    story.imagePathRaw = faker.internet.url(),
-    story.status = faker.internet.httpStatusCode().toString(),
-    story.categories = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
-    story.tags = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
-    story.chapterPathRaw = faker.internet.url(),
-    story.outsideChaptersLength = faker.datatype.number(),
-    story.insideChaptersLength = faker.datatype.number(),
-    story.hasChapterNeedContent = faker.datatype.boolean(),
-    story.outsideSrc = faker.name.findName(),
-    story.outsideSVC = faker.name.findName(),
-    story.language = 'vi'
-    await storyRepository.save(story)
-    console.log(`save story: ${index}`)
-  }
+  // for (let index = 0; index < 300000; index++) {
+  //   const story = new Story();
+  //   story.name = faker.name.findName(),
+  //   story.slug = story.name.replace(/ /, '-').toLowerCase(),
+  //   story.authorName = faker.name.findName(),
+  //   story.authorSlug = story.name.replace(/ /, '-').toLowerCase(),
+  //   story.imagePathRaw = faker.internet.url(),
+  //   story.status = faker.internet.httpStatusCode().toString(),
+  //   story.categories = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
+  //   story.tags = Array.from(Array(faker.datatype.number({ max: 10 })).keys()).map(i => faker.name.findName()),
+  //   story.chapterPathRaw = faker.internet.url(),
+  //   story.outsideChaptersLength = faker.datatype.number(),
+  //   story.insideChaptersLength = faker.datatype.number(),
+  //   story.hasChapterNeedContent = faker.datatype.boolean(),
+  //   story.outsideSrc = faker.name.findName(),
+  //   story.outsideSVC = faker.name.findName(),
+  //   story.language = 'vi'
+  //   await storyRepository.save(story)
+  //   console.log(`save story: ${index}`)
+  // }
 
   console.time('storyRepository.find')
-  const stories = await storyRepository.find()
+  const stories = await storyRepository
+  .createQueryBuilder('story')
+    .where(`story.tags && ARRAY [:...tags]`, {
+      tags: ['Jane Reinger', 'Annie Tillman', 'Traci Nienow']
+    })
+    .getMany()
+
   // console.log("Loaded stories: ", stories)
   console.timeEnd('storyRepository.find')
-  console.log('storyRepository.find', stories.length)
+  console.log('storyRepository.find', stories)
 
   // const user = new User();
   // user.firstName = 'Timber';
