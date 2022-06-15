@@ -18,8 +18,8 @@ export class Story {
     @Column({ nullable: true })
     hashAuthor: string
 
-    @Column({ nullable: true })
-    hashAuthorSite: string
+    @Column({ nullable: true, type: 'text', array: true })
+    hashAuthorSite: string[]
 
     @Column()
     authorSlug: string
@@ -30,8 +30,8 @@ export class Story {
     @Column({ nullable: true })
     hashImagePath: string
 
-    @Column({ nullable: true })
-    hashImagePathSite: string
+    @Column({ nullable: true, type: 'text', array: true })
+    hashImagePathSite: string[]
 
     @Column()
     status: string
@@ -39,8 +39,8 @@ export class Story {
     @Column({ nullable: true })
     hashStatus: string
 
-    @Column({ nullable: true })
-    hashStatusSite: string
+    @Column({ nullable: true, type: 'text', array: true })
+    hashStatusSite: string[]
 
     @Column({ type: 'text', array: true, nullable: true })
     categories: string[]
@@ -48,8 +48,8 @@ export class Story {
     @Column({ nullable: true })
     hashCategories: string
 
-    @Column({ nullable: true })
-    hashCategoriesSite: string
+    @Column({ nullable: true, type: 'text', array: true })
+    hashCategoriesSite: string[]
 
     @Column({ type: 'text', array: true, nullable: true })
     tags: string[]
@@ -57,8 +57,8 @@ export class Story {
     @Column({ nullable: true })
     hashTags: string
 
-    @Column({ nullable: true })
-    hashTagsSite: string
+    @Column({ nullable: true, type: 'text', array: true })
+    hashTagsSite: string[]
 
     @Column()
     chapterPathRaw: string
