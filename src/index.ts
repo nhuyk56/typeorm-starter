@@ -49,9 +49,10 @@ const main = async () => {
   console.time('storyRepository.find')
   const stories = await storyRepository
   .createQueryBuilder('story')
-    .where(`story.tags && ARRAY [:...tags]`, {
-      tags: ['Jane Reinger', 'Annie Tillman', 'Traci Nienow']
-    })
+    // .where(`story.tags && ARRAY [:...tags]`, {
+    //   tags: ['Jane Reinger', 'Annie Tillman', 'Traci Nienow']
+    // })
+    .where(`story.categories && array_append(ARRAY[NULL], story."outsideSVC")`)
     .getMany()
 
   // console.log("Loaded stories: ", stories)
