@@ -1,6 +1,4 @@
-import axios from 'axios'
-import { load as cheerioLoad } from 'cheerio'
-import { trimValue, getSlug, getHash } from '../../utility/index'
+import { axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
 
 const storeField = {
   id: o => '???',
@@ -34,7 +32,7 @@ const storeField = {
 }
 
 const getStoryFromSLink = async SLink => {
-  const { data } = await axios.get(SLink)
+  const { data } = await axios.get(encodeURI(SLink))
   const $ = cheerioLoad(data)
   const jsonLD = JSON.parse($('[type="application/ld+json"]').text())
   const story = {}
@@ -44,4 +42,6 @@ const getStoryFromSLink = async SLink => {
   console.log(story)
 }
 
-getStoryFromSLink('https://truyen.tangthuvien.vn/doc-truyen/bac-am-dai-thanh')
+export {
+  getStoryFromSLink
+}

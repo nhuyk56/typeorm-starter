@@ -4,6 +4,8 @@ const sitemap = 'https://truyen.tangthuvien.vn/sitemap.xml'
 import axios from 'axios'
 import { load as cheerioLoad } from 'cheerio'
 import { trimValue } from '../../utility/index'
+import { getLinksFromSitemap } from './sitemap'
+import { getStoryFromSLink } from './story'
 
 // sitemap >> [slink] >> slink >> story >> chapters >> [chapter]
 
@@ -39,8 +41,13 @@ const getStories = _html => {
 const main = async () => {
   // const { data } = await axios.get(url)
   // getChapters(data)
-  const { data } = await axios.get(sitemap)
-  getStories(data)
+  // const { data } = await axios.get(sitemap)
+  // getStories(data)
+  const links = await getLinksFromSitemap()
+  for (const item of links) {
+    console.log(`[${item.index}]: ${item.link}`)
+    await getStoryFromSLink(item.link)
+  }
 }
 
 main()
