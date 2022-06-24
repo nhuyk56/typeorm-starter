@@ -22,6 +22,7 @@
    "scripts": {
       "start": "ts-node src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs",
-      "ttv": "ts-node ./src/source-story/ttv/tangthuvien"
+      "ttv": "ts-node ./src/source-story/ttv/tangthuvien",
+      "testproxy": "ts-node testproxy.ts"
    }
 }
