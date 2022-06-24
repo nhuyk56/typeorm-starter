@@ -44,9 +44,14 @@ const main = async () => {
   // const { data } = await axios.get(sitemap)
   // getStories(data)
   const links = await getLinksFromSitemap()
+  var stories = []
   for (const item of links) {
     console.log(`[${item.index}]: ${item.link}`)
-    await getStoryFromSLink(item.link)
+    stories.push(getStoryFromSLink(item.link))
+    if (stories.length === 5) {
+      await Promise.all(stories)
+      stories = []
+    }
   }
 }
 
