@@ -4,11 +4,12 @@ const SITEMAP_URL = 'https://truyen.tangthuvien.vn/sitemap.xml'
 const getStories = _html => {
   const $ = cheerioLoad(_html)
   const Link = []
+  let index = 0
   $('url loc').each((i, loc) => {
     const _link = trimValue($(loc).text())
     if (/doc-truyen/.test(_link)) {
       Link.push({
-        index: i,
+        index: index++,
         link: $(loc).text()
       })
     }
