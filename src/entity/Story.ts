@@ -6,6 +6,9 @@ export class Story {
     @PrimaryGeneratedColumn()
     id: number
 
+    @PrimaryGeneratedColumn()
+    sId: number
+
     @Column()
     name: string
 
@@ -23,6 +26,9 @@ export class Story {
 
     @Column()
     authorSlug: string
+
+    @Column()
+    imagePathSrc: string
 
     @Column()
     imagePathRaw: string

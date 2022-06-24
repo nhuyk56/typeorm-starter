@@ -1,9 +1,11 @@
+// import 'module-alias/register'
 const url = 'https://truyen.tangthuvien.vn/story/chapters?story_id=17299'
 const sitemap = 'https://truyen.tangthuvien.vn/sitemap.xml'
 import axios from 'axios'
 import { load as cheerioLoad } from 'cheerio'
+import { trimValue } from '../../utility/index'
 
-const trimValue = s => (s || '').trim()
+// sitemap >> [slink] >> slink >> story >> chapters >> [chapter]
 
 const getChapters = _html => {
   const $ = cheerioLoad(_html)
@@ -35,10 +37,10 @@ const getStories = _html => {
 }
 
 const main = async () => {
-  const { data } = await axios.get(url)
-  getChapters(data)
-  // const { data } = await axios.get(sitemap)
-  // getStories(data)
+  // const { data } = await axios.get(url)
+  // getChapters(data)
+  const { data } = await axios.get(sitemap)
+  getStories(data)
 }
 
 main()
