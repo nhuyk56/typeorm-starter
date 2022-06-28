@@ -2,7 +2,7 @@
 const url = 'https://truyen.tangthuvien.vn/story/chapters?story_id=17299'
 const sitemap = 'https://truyen.tangthuvien.vn/sitemap.xml'
 import { load as cheerioLoad } from 'cheerio'
-import { HttpsProxyAgent } from 'https-proxy-agent'
+// import { HttpsProxyAgent } from 'https-proxy-agent'
 import { trimValue, axios } from '../../utility/index'
 import { getLinksFromSitemap } from './sitemap'
 import { getStoryFromSLink } from './story'
@@ -44,27 +44,27 @@ const main = async () => {
   // const { data } = await axios.get(sitemap)
   // getStories(data)
 
-  const { data } = await axios.get('http://api64.ipify.org/?format=json', {
-    proxy: false,
-    httpsAgent: new HttpsProxyAgent('http://207.148.123.54:32022')
-    // proxy: {
-    //   host: '207.148.123.54',
-    //   port: 32022,
-    //   protocol: 'http'
-    // }
-  })
-  console.log(data)
+  // const { data } = await axios.get('http://api64.ipify.org/?format=json', {
+  //   proxy: false,
+  //   httpsAgent: new HttpsProxyAgent('http://207.148.123.54:32022')
+  //   // proxy: {
+  //   //   host: '207.148.123.54',
+  //   //   port: 32022,
+  //   //   protocol: 'http'
+  //   // }
+  // })
+  // console.log(data)
   
-  // const links = await getLinksFromSitemap()
-  // var stories = []
-  // for (const item of links) {
-  //   console.log(`[${item.index}]: ${item.link}`)
-  //   stories.push(getStoryFromSLink(item.link))
-  //   if (stories.length === 5) {
-  //     await Promise.all(stories)
-  //     stories = []
-  //   }
-  // }
+  const links = await getLinksFromSitemap()
+  var stories = []
+  for (const item of links) {
+    console.log(`[${item.index}]: ${item.link}`)
+    stories.push(getStoryFromSLink(item.link))
+    if (stories.length === 100) {
+      await Promise.all(stories)
+      stories = []
+    }
+  }
 }
 
 main()
