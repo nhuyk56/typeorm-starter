@@ -1,4 +1,4 @@
-import { axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
+import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
 const SITEMAP_URL = 'https://truyen.tangthuvien.vn/sitemap.xml'
 
 const getStories = _html => {
@@ -18,7 +18,7 @@ const getStories = _html => {
 }
 
 const getLinksFromSitemap = async () => {
-  const { data } = await axios.get(SITEMAP_URL)
+  const { data } = await forceFunction(() => axios.get(SITEMAP_URL))
   return getStories(data)
 }
 

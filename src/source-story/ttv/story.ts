@@ -1,4 +1,4 @@
-import { axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
+import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
 
 const storeField = {
   id: o => '???',
@@ -32,7 +32,7 @@ const storeField = {
 }
 
 const getStoryFromSLink = async SLink => {
-  const { data } = await axios.get(encodeURI(SLink))
+  const { data } = await forceFunction(() => axios.get(encodeURI(SLink)))
   const $ = cheerioLoad(data)
   const jsonLD = JSON.parse($('[type="application/ld+json"]').text())
   const story = {}
