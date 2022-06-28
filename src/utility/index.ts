@@ -12,7 +12,7 @@ const getHash = s => s && md5(trimValue(s)).toString()
 const axios = Axios.create({ httpsAgent, timeout: 60000 });
 
 const forceFunction = async callback => {
-  let times = 10
+  let times = 100
   while (times > 0) {
     try {
       return await callback()
@@ -20,6 +20,7 @@ const forceFunction = async callback => {
       console.log('try times', --times)
     }
   }
+  throw new Error(callback)
 }
 
 export {
