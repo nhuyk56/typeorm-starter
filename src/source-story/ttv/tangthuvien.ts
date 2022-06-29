@@ -65,7 +65,7 @@ const main = async () => {
       await Promise.all(stories)
     }
   }
-  // await Promise.all(stories)
+  await Promise.all(stories)
 }
 
 main()
