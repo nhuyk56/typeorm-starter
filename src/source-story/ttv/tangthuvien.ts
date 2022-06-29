@@ -60,7 +60,7 @@ const main = async () => {
   for (const item of links) {
     console.log(`[${item.index}]: ${item.link}`)
     stories.push(getStoryFromSLink(item.link))
-    if (stories.length === 5) {
+    if (stories.length === 1000) {
       await Promise.all(stories)
       stories = []
     }
