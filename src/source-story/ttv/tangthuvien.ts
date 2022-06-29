@@ -61,8 +61,8 @@ const main = async () => {
     console.log(`[${item.index}]: ${item.link}`)
     stories.push(getStoryFromSLink(item.link))
     if (stories.length === 5) {
-      stories = []
       await Promise.all(stories)
+      stories = []
     }
   }
   await Promise.all(stories)
