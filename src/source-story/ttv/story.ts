@@ -33,7 +33,7 @@ const storeField = {
 
 const getStoryFromSLink = async SLink => {
   try {
-    const { data } = await forceFunction(() => axios.get(encodeURI(SLink)))
+    const { data } = await forceFunction(async () => await axios.get(encodeURI(SLink)))
     const $ = cheerioLoad(data)
     const jsonLD = JSON.parse($('[type="application/ld+json"]').text())
     const story = {}
