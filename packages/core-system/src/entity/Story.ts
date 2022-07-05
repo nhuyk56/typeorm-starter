@@ -1,89 +1,94 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm";
 
 @Entity()
 export class Story {
+  @PrimaryColumn()
+  id: string;
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column()
+  sId: string;
 
-    @PrimaryGeneratedColumn()
-    sId: number
+  @Column()
+  name: string;
 
-    @Column()
-    name: string
+  @Column()
+  slug: string;
 
-    @Column()
-    slug: string
+  @Column()
+  authorName: string;
 
-    @Column()
-    authorName: string
+  @Column({ nullable: true })
+  hashAuthor: string;
 
-    @Column({ nullable: true })
-    hashAuthor: string
+  @Column({ nullable: true, type: "text", array: true })
+  hashAuthorSite: string[];
 
-    @Column({ nullable: true, type: 'text', array: true })
-    hashAuthorSite: string[]
+  @Column()
+  authorSlug: string;
 
-    @Column()
-    authorSlug: string
+  @Column()
+  imagePathSrc: string;
 
-    @Column()
-    imagePathSrc: string
+  @Column({ nullable: true })
+  imagePathRaw: string;
 
-    @Column()
-    imagePathRaw: string
+  @Column({ nullable: true })
+  hashImagePath: string;
 
-    @Column({ nullable: true })
-    hashImagePath: string
+  @Column({ nullable: true, type: "text", array: true })
+  hashImagePathSite: string[];
 
-    @Column({ nullable: true, type: 'text', array: true })
-    hashImagePathSite: string[]
+  @Column()
+  status: string;
 
-    @Column()
-    status: string
+  @Column({ nullable: true })
+  hashStatus: string;
 
-    @Column({ nullable: true })
-    hashStatus: string
+  @Column({ nullable: true, type: "text", array: true })
+  hashStatusSite: string[];
 
-    @Column({ nullable: true, type: 'text', array: true })
-    hashStatusSite: string[]
+  @Column({ type: "text", array: true, nullable: true })
+  categories: string[];
 
-    @Column({ type: 'text', array: true, nullable: true })
-    categories: string[]
+  @Column({ nullable: true })
+  hashCategories: string;
 
-    @Column({ nullable: true })
-    hashCategories: string
+  @Column({ nullable: true, type: "text", array: true })
+  hashCategoriesSite: string[];
 
-    @Column({ nullable: true, type: 'text', array: true })
-    hashCategoriesSite: string[]
+  @Column({ type: "text", array: true, nullable: true })
+  tags: string[];
 
-    @Column({ type: 'text', array: true, nullable: true })
-    tags: string[]
+  @Column({ nullable: true })
+  hashTags: string;
 
-    @Column({ nullable: true })
-    hashTags: string
+  @Column({ nullable: true, type: "text", array: true })
+  hashTagsSite: string[];
 
-    @Column({ nullable: true, type: 'text', array: true })
-    hashTagsSite: string[]
+  @Column({ nullable: true })
+  chapterPathRaw: string;
 
-    @Column()
-    chapterPathRaw: string
+  @Column()
+  outsideChaptersLength: number;
 
-    @Column()
-    outsideChaptersLength: number
+  @Column({ nullable: true })
+  insideChaptersLength: number;
 
-    @Column()
-    insideChaptersLength: number
+  @Column({ nullable: true })
+  insideChaptersContentLength: number;
 
-    @Column()
-    hasChapterNeedContent: boolean
+  @Column()
+  outsideSrc: string;
 
-    @Column()
-    outsideSrc: string
+  @Column()
+  outsideSVC: string;
 
-    @Column()
-    outsideSVC: string
+  @Column()
+  language: "ch" | "vi" | "en";
 
-    @Column()
-    language: 'ch' | 'vi'| 'en'
+  constructor(item) {
+    for (const key in item) {
+      this[key] = item[key];
+    }
+  }
 }
