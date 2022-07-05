@@ -20,6 +20,7 @@ const initStory = async (sitemapRow) => {
     const fieldsUpdate = [
       'sId',
       'name',
+      'hashName',
       'slug',
       'authorName',
       'hashAuthor',
@@ -38,7 +39,7 @@ const initStory = async (sitemapRow) => {
     fieldsUpdate.forEach(field => story[field] = item[field])
   } else {
     story = new Story(item)
-    console.log(`${item.id} exist >> create`)
+    console.log(`${item.id} not exist >> create`)
   }
   /** case create */
   await storyRepository.save(story)
@@ -48,13 +49,12 @@ const initStory = async (sitemapRow) => {
 const main = async () => {
   /** db >> json [pending]*/
   /** start db engine [ok]*/
-  /** util >> getList DB [current]*/
-  /** add/update */
+  /** util >> getList DB >> add/update [ok]*/
 
   if (StoryUtil) {
     const links = await StoryUtil.getLinksFromSitemap()
     var all = []
-    for (const item of [links[0]]) {
+    for (const item of links) { /** DEBUG >> [links[0]] */
       all.push(initStory(item))
       if (all.length === 1000) {
         await Promise.all(all)

@@ -3,6 +3,8 @@ import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '
 const storeField = {
   sId: o => o.$('[name=\'book_detail\']').attr('content'),
   name: o => o.$('title').text(),
+  hashName: o => getHash(storeField.name(o)),
+  hashNameSite: o => null,
   slug: o => o.$('[name=\'book_path\']').attr('content'),
   authorName: o => trimValue(o.$(o?.$('p.tag *')?.get(0))?.text()),
   hashAuthor: o => getHash(storeField.authorName(o)),
@@ -28,7 +30,7 @@ const storeField = {
   outsideSrc: o => o.SLink,
   outsideSVC: o => 'tangthuvien',
   language: o => 'vi',
-  id: o => getHash(`${storeField.outsideSVC(o)}.${storeField.slug(o)}.${storeField.authorSlug(o)}`),
+  id: o => getHash(`${storeField.outsideSVC(o)}.${storeField.sId(o)}`), /** tránh case change name */
 }
 
 const getStoryFromSLink = async SLink => {

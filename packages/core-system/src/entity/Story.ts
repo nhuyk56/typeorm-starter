@@ -12,6 +12,12 @@ export class Story {
   name: string;
 
   @Column()
+  hashName: string;
+
+  @Column({ nullable: true })
+  hashNameSite: string;
+
+  @Column()
   slug: string;
 
   @Column()
