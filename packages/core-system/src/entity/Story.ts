@@ -36,10 +36,13 @@ export class Story {
   imagePathSrc: string;
 
   @Column({ nullable: true })
+  hashImagePathSrc: string;
+
+  @Column({ nullable: true })
   imagePathRaw: string;
 
   @Column({ nullable: true })
-  hashImagePath: string;
+  hashImagePathRaw: string;
 
   @Column({ nullable: true, type: "text", array: true })
   hashImagePathSite: string[];
