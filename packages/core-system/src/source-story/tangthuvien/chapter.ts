@@ -19,7 +19,7 @@ const getChapters = async storyItem => {
         contentPathRaw: '',
         manifestPathRaw: ''
       }
-      chapterField.id = getHash(`${chapterField.outsideSVC}.${chapterField.sId}`), /** tránh case change name */
+      chapterField.id = getHash(`${chapterField.outsideSVC}.${chapterField.sId}`),
       chapters.push(chapterField)
     })
     console.log(chapters)
