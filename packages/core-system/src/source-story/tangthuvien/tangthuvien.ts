@@ -3,7 +3,7 @@ const url = 'https://truyen.tangthuvien.vn/story/chapters?story_id=17299'
 const sitemap = 'https://truyen.tangthuvien.vn/sitemap.xml'
 import { load as cheerioLoad } from 'cheerio'
 // import { HttpsProxyAgent } from 'https-proxy-agent'
-import { trimValue, axios } from '../../utility/index'
+import { trimValue, axios, upFolder2Git } from '../../utility/index'
 import { getLinksFromSitemap } from './sitemap'
 import { getStoryFromSLink } from './story'
 import { getChapters } from './chapter'
@@ -71,4 +71,12 @@ import { getChapters } from './chapter'
 
 // main()
 
-getChapters({ sId: 33847 })
+// getChapters({ sId: 33847 })
+
+upFolder2Git({
+  folderPath: 'C:/Users/YNN/AppData/Local/Temp/folderTest',
+  errorPath: 'C:/Users/YNN/AppData/Local/Temp/errorFolder',
+  gitSSH: 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git',
+  // brand: 'brandtest1', archived
+  removeFolder: true
+})
