@@ -71,12 +71,12 @@ import { getChapters } from './chapter'
 
 // main()
 
-// getChapters({ sId: 33847 })
+getChapters({ sId: 33847 })
 
-upFolder2Git({
-  folderPath: 'C:/Users/YNN/AppData/Local/Temp/folderTest',
-  errorPath: 'C:/Users/YNN/AppData/Local/Temp/errorFolder',
-  gitSSH: 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git',
-  brand: 'brandtest1',
-  removeFolder: true
-})
+// upFolder2Git({
+//   folderPath: 'C:/Users/YNN/AppData/Local/Temp/folderTest',
+//   errorPath: 'C:/Users/YNN/AppData/Local/Temp/errorFolder',
+//   gitSSH: 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git',
+//   brand: 'brandtest1',
+//   removeFolder: true
+// })
