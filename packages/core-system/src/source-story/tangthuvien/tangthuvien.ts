@@ -77,6 +77,6 @@ upFolder2Git({
   folderPath: 'C:/Users/YNN/AppData/Local/Temp/folderTest',
   errorPath: 'C:/Users/YNN/AppData/Local/Temp/errorFolder',
   gitSSH: 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git',
-  // brand: 'brandtest1', archived
+  brand: 'brandtest1',
   removeFolder: true
 })

@@ -39,7 +39,7 @@ const upFolder2Git = async (option) => {
    * folderPath: C:\Users\YNN\AppData\Local\Temp\folderName
    * errorPath: C:\Users\YNN\err
    * gitSSH: git@github.com:userABC/gitABC.git
-   * [archived]: brand: (string/null), null then >>> hashMD5(new date time() + ramdom)
+   * brand: (string/null), null then >>> hashMD5(new date time() + ramdom)
    * removeFolder
    *-----------------------------------------------------------------------
    * [process]
@@ -61,9 +61,8 @@ const upFolder2Git = async (option) => {
   if (!option.folderPath) throw new Error('Missing folderPath')
   else if (!fs.existsSync(option.folderPath)) throw new Error(`folderPath ${option.folderPath} not exist!`)
   if (!option.gitSSH) throw new Error('Missing gitSSH')
-  // if (!option.brand) option.brand = new Date().getTime().toString()
-  // else option.brand = getSlug(option.brand)
-  option.brand = getHash(new Date().getTime().toString() + option.folderPath + Math.random())
+  if (!option.brand) option.brand = new Date().getTime().toString()
+  else option.brand = getSlug(option.brand)
 
   let times = 0
   const before = Date.now();
@@ -82,7 +81,7 @@ const upFolder2Git = async (option) => {
   shell.exec(warnCLI(`git checkout -b ${option.brand}`), getShellOption(option.folderPath))
   shell.exec(warnCLI(`git add .`), getShellOption(option.folderPath))
   shell.exec(warnCLI(`git commit -m "${option.brand}"`), getShellOption(option.folderPath))
-  const pushMessage = shell.exec(warnCLI(`git push --set-upstream origin ${option.brand}`), getShellOption(option.folderPath))
+  const pushMessage = shell.exec(warnCLI(`git push -f --set-upstream origin ${option.brand}`), getShellOption(option.folderPath))
   if (pushMessage.code === 0) {
     if (option.removeFolder) {
       shell.exec(warnCLI(`rm -rf ${option.folderPath}`), getShellOption(option.folderPath))
