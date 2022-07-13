@@ -1,6 +1,10 @@
 import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
 // npx ts-node .\src\source-story\tangthuvien\tangthuvien.ts
 const getChapters = async storyItem => {
+  /**
+   * make folder with id
+   * clone/ file raw git >> gán path cho story:db
+  */
   try {
     const { data } = await forceFunction(() => axios.get(encodeURI(
       `https://truyen.tangthuvien.vn/story/chapters?story_id=${storyItem.sId}`
