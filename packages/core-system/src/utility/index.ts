@@ -100,6 +100,19 @@ const upFolder2Git = async (option) => {
   return false
 }
 
+const getLocalFolderChapter = folderName => {
+  const pathLocalFolderChapter = path.join(process.env.TEMP, folderName)
+  if (!fs.existsSync(pathLocalFolderChapter)){
+    console.log(1111)
+    fs.mkdirSync(pathLocalFolderChapter, { recursive: true });
+  }
+  return pathLocalFolderChapter
+}
+
+const getManifestStoryPath = storyItem => {
+  return path.join(getLocalFolderChapter(storyItem.id), 'index.json')
+}
+
 export {
   axios,
   cheerioLoad,
@@ -107,5 +120,7 @@ export {
   getHash,
   getSlug,
   forceFunction,
-  upFolder2Git
+  upFolder2Git,
+  getLocalFolderChapter,
+  getManifestStoryPath
 }

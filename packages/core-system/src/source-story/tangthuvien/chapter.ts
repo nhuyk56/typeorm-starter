@@ -1,4 +1,13 @@
-import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
+import {
+  forceFunction,
+  axios,
+  cheerioLoad,
+  trimValue,
+  getHash,
+  getSlug,
+  getLocalFolderChapter,
+  getManifestStoryPath
+} from '../../utility/index'
 // npx ts-node .\src\source-story\tangthuvien\tangthuvien.ts
 const getChapters = async storyItem => {
   /**
@@ -6,6 +15,9 @@ const getChapters = async storyItem => {
    * clone/ file raw git >> gán path cho story:db
   */
   try {
+    const localFolderChapter = getLocalFolderChapter(storyItem.id)
+    console.log(localFolderChapter)
+    return
     const { data } = await forceFunction(() => axios.get(encodeURI(
       `https://truyen.tangthuvien.vn/story/chapters?story_id=${storyItem.sId}`
     )))
