@@ -4,6 +4,7 @@ import { In } from "typeorm";
 import * as UTIL from './source-story'
 
 const args = require('args-parser')(process.argv)
+console.log('args', args)
 // inject env
 Object.keys(args).forEach(k => {
   if (!process.env[k]) {
@@ -12,19 +13,52 @@ Object.keys(args).forEach(k => {
 })
 const StoryUtil = UTIL?.[args.target]
 
-const initStory = async (storyItem) => {
-  const insideChaptersLength = await StoryUtil.syncChapters(
+const init = async (storyItem) => {
+  const icl = await StoryUtil.syncChapters(
     JSON.parse(
       JSON.stringify(storyItem)
     )
   )
-  // const storyRepository = AppDataSource.getRepository(Story)
-  // await storyRepository.save({ id: storyItem.id, insideChaptersLength })
+  const storyRepository = AppDataSource.getRepository(Story)
+  await storyRepository.save({
+    id: storyItem.id,
+    outsideChaptersLength: icl,
+    insideChaptersLength: icl
+  })
   console.log(`handle manifest ${storyItem.id}:${storyItem.name} success`)
+}
+
+const reset = async () => {
+  let r = 0
+  const storyRepository = AppDataSource.getRepository(Story)
+  while(true) {
+    const stories = await storyRepository
+      .createQueryBuilder('sto')
+      .where(`sto."outsideChaptersLength" is not NULL`)
+      .andWhere(`sto."outsideChaptersLength" = sto."insideChaptersLength"`)
+      .andWhere(`(sto."insideChaptersContentLength" is null or sto."outsideChaptersLength" != sto."insideChaptersContentLength")`)
+      .limit(100)
+      .getMany()
+    if (!stories.length) break
+    r += stories.length
+    stories.forEach(s => {
+      s.insideChaptersLength = s.insideChaptersContentLength || null
+      console.log('reset', s.name)
+    })
+    await Promise.all(stories.map(s => storyRepository.save(s)))
+  }
+  return r
 }
 
 const main = async () => {
   if (StoryUtil) {
+    if (args.force) {
+      console.log('args.force', args.force)
+      console.log("START RESET")
+      const r =  await reset()
+      console.log(`RESET ${r} items`)
+      console.log("END RESET")
+    }
     const storyRepository = AppDataSource.getRepository(Story)
     while(true) {
       const stories = await storyRepository
@@ -34,7 +68,7 @@ const main = async () => {
         .getMany()
       console.log(stories.length)
       if (!stories.length) break
-      await Promise.all(stories.map(s => initStory(s)))
+      await Promise.all(stories.map(s => init(s)))
     }
   } else {
     throw new Error(`target: ${args.target} has not UTIL`)
@@ -45,4 +79,4 @@ AppDataSource.initialize().then(main).catch(error => {
   console.log(error)
 })
 
-// npm run chapter:main target=tangthuvien
+// npm run chapter:main target=tangthuvien force
