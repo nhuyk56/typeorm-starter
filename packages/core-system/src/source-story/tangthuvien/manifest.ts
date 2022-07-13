@@ -21,7 +21,7 @@ const getManifestContent = async manifestLink => {
 const groupAndIndex = async (manifest) => {
   for (const chItem of manifest.chapters) {
     const { data } = await axiosNomal.post('http://127.0.0.1:2020/group-and-index', {
-      // { key: '' manifestPath: '', story: '', chapter: '' }
+      // { key: '' manifestPath: '', story: '', chapter: '', max: '', all }
       key: manifest.outsideSVC,
       manifestPath: getManifestStoryPath(manifest),
       story: Object.assign({}, {
@@ -37,6 +37,7 @@ const groupAndIndex = async (manifest) => {
         language: manifest.language
       }),
       chapter: chItem,
+      max: 10
     })
     if (data?.group) {
       setGroupChapterData(data)

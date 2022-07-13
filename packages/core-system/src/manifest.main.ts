@@ -40,7 +40,7 @@ const reset = async () => {
       .andWhere(`sto.outsideSVC = :...outsideSVC`, {
         outsideSVC: [args.target]
       })
-      .limit(100)
+      .limit(1000)
       .getMany()
     if (!stories.length) break
     r += stories.length
@@ -70,7 +70,7 @@ const main = async () => {
         .andWhere(`sto.outsideSVC = :...outsideSVC`, {
           outsideSVC: [args.target]
         })
-        .limit(1000)
+        .limit(100)
         .getMany()
       console.log('sync manifes', args.target, stories.length)
       if (!stories.length) break
@@ -85,4 +85,4 @@ AppDataSource.initialize().then(main).catch(error => {
   console.log(error)
 })
 
-// npm run chapter:main target=tangthuvien force
+// npm run manifest:main target=tangthuvien force
