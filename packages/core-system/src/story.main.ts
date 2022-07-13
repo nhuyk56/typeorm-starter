@@ -4,6 +4,12 @@ import { In } from "typeorm";
 import * as UTIL from './source-story'
 
 const args = require('args-parser')(process.argv)
+// inject env
+Object.keys(args).forEach(k => {
+  if (!process.env[k]) {
+    process.env[k] = args[k]
+  }
+})
 const StoryUtil = UTIL?.[args.target]
 
 const initStory = async (sitemapRow) => {

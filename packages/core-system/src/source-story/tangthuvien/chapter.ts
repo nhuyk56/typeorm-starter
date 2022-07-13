@@ -5,19 +5,44 @@ import {
   trimValue,
   getHash,
   getSlug,
-  getLocalFolderChapter,
-  getManifestStoryPath
+  genLocalFolder,
+  getManifestStoryPath,
+  setManifestStoryData
 } from '../../utility/index'
-// npx ts-node .\src\source-story\tangthuvien\tangthuvien.ts
-const getChapters = async storyItem => {
+
+const getManifestContent = async manifestLink => {
+  const { data } = await forceFunction(() => axios.get(manifestLink))
+  if (typeof data === 'string') {
+    return JSON.parse(data)
+  }
+  return data
+}
+
+const syncChapters = async storyItem => {
   /**
    * make folder with id
    * clone/ file raw git >> gán path cho story:db
   */
   try {
-    const localFolderChapter = getLocalFolderChapter(storyItem.id)
-    console.log(localFolderChapter)
-    return
+    const localFolderPath = genLocalFolder(storyItem.id)
+    console.log('localFolderPath', localFolderPath)
+
+    let manifest = storyItem
+    if (storyItem.chapterPathRaw) {
+      manifest = await getManifestContent(storyItem.chapterPathRaw)
+    }
+
+    if (!manifest?.chapters) {
+      manifest.chapters = []
+    }
+
+    /** mapper */
+    const chapterMapper = {}
+    manifest.chapters.forEach(ch => {
+      chapterMapper[ch.id] = true
+    });
+
+
     const { data } = await forceFunction(() => axios.get(encodeURI(
       `https://truyen.tangthuvien.vn/story/chapters?story_id=${storyItem.sId}`
     )))
@@ -38,13 +63,21 @@ const getChapters = async storyItem => {
       chapterField.id = getHash(`${chapterField.outsideSVC}.${chapterField.sId}`),
       chapters.push(chapterField)
     })
-    console.log(chapters)
-    return chapters
+
+    /** inject chapters */
+    chapters.forEach(ch => {
+      if (!chapterMapper[ch.id]) {
+        manifest.chapters.push(ch)
+      }
+    })
+    manifest.chapters = manifest.chapters.sort((a, b) => a.index < b.index ? -1 : (a.index === b.index ? 0 : 1))
+    setManifestStoryData(manifest)
+    return manifest.chapters.length
   } catch (error) {
     throw error
   }
 }
 
 export {
-  getChapters
+  syncChapters
 }

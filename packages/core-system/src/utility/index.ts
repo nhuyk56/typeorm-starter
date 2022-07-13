@@ -100,17 +100,28 @@ const upFolder2Git = async (option) => {
   return false
 }
 
-const getLocalFolderChapter = folderName => {
-  const pathLocalFolderChapter = path.join(process.env.TEMP, folderName)
+const genLocalFolder = folderName => {
+  const temp = process.env.mytemp || process.env.TEMP
+  const general = path.join(temp, '__general__')
+  const pathLocalFolderChapter = path.join(general, folderName)
   if (!fs.existsSync(pathLocalFolderChapter)){
-    console.log(1111)
     fs.mkdirSync(pathLocalFolderChapter, { recursive: true });
   }
   return pathLocalFolderChapter
 }
 
 const getManifestStoryPath = storyItem => {
-  return path.join(getLocalFolderChapter(storyItem.id), 'index.json')
+  return path.join(genLocalFolder(storyItem.id), 'index.json')
+}
+
+const setManifestStoryData = storyItem => {
+  try {
+    fs.writeFileSync(getManifestStoryPath(storyItem), JSON.stringify(storyItem), 'utf-8')
+  } catch (error) {
+    console.log('setManifestStoryData', error)
+    return false 
+  }
+   return true 
 }
 
 export {
@@ -121,6 +132,7 @@ export {
   getSlug,
   forceFunction,
   upFolder2Git,
-  getLocalFolderChapter,
-  getManifestStoryPath
+  genLocalFolder,
+  getManifestStoryPath,
+  setManifestStoryData
 }
