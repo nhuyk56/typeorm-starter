@@ -77,13 +77,13 @@ export class Story {
   @Column({ nullable: true })
   chapterPathRaw: string;
 
-  @Column()
+  @Column({ default: 0 })
   outsideChaptersLength: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   insideChaptersLength: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   insideChaptersContentLength: number;
 
   @Column()

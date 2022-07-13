@@ -47,21 +47,18 @@ const initStory = async (sitemapRow) => {
 }
 
 const main = async () => {
-  /** db >> json [pending]*/
-  /** start db engine [ok]*/
-  /** util >> getList DB >> add/update [ok]*/
+  /**
+   * db >> outsideChaptersLength != insideChaptersLength
+   * add/update manifes >> update insideChaptersLength
+   */
 
   if (StoryUtil) {
-    const links = await StoryUtil.getLinksFromSitemap()
-    var all = []
-    for (const item of links) { /** DEBUG >> [links[0]] */
-      all.push(initStory(item))
-      if (all.length === 1000) {
-        await Promise.all(all)
-        all = []
-      }
-    }
-    await Promise.all(all)
+    const storyRepository = AppDataSource.getRepository(Story)
+    const stories = await storyRepository
+      .createQueryBuilder('story')
+      .where(`story.outsideChaptersLength != story.insideChaptersLength`)
+      .limit(100)
+    console.log(stories)
   } else {
     throw new Error(`target: ${args.target} has not UTIL`)
   }
@@ -71,4 +68,4 @@ AppDataSource.initialize().then(main).catch(error => {
   console.log(error)
 })
 
-// npm run story:main target=tangthuvien
+// npm run chapter:main target=tangthuvien

@@ -25,6 +25,7 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "ttv": "ts-node ./src/source-story/ttv/tangthuvien",
     "story:main": "ts-node ./src/story.main",
+    "chapter:main": "ts-node ./src/chapter.main",
     "testproxy": "ts-node testproxy.ts"
   }
 }
