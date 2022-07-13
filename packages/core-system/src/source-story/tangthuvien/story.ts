@@ -1,4 +1,4 @@
-import { forceFunction, axios, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
+import { forceFunction, axiosProxy, cheerioLoad, trimValue, getHash, getSlug } from '../../utility/index'
 
 const storeField = {
   sId: o => o.$('[name=\'book_detail\']').attr('content'),
@@ -36,7 +36,7 @@ const storeField = {
 
 const getStoryFromSLink = async SLink => {
   try {
-    const { data } = await forceFunction(() => axios.get(encodeURI(SLink)))
+    const { data } = await forceFunction(() => axiosProxy.get(encodeURI(SLink)))
     const $ = cheerioLoad(data)
     const story = {}
     for (const key in storeField) {

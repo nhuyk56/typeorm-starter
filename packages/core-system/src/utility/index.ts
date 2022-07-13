@@ -12,7 +12,8 @@ const agent = new SocksProxyAgent(proxyOptions);
 
 const trimValue = s => String(s || '').trim()
 const getHash = s => s && md5(trimValue(s)).toString()
-const axios = Axios.create({ httpAgent: agent, httpsAgent: agent, timeout: 60000 });
+const axiosProxy = Axios.create({ httpAgent: agent, httpsAgent: agent, timeout: 60000 });
+const axiosNomal = Axios
 
 const forceFunction = async callback => {
   let times = 100
@@ -111,7 +112,7 @@ const genLocalFolder = folderName => {
 }
 
 const getManifestStoryPath = storyItem => {
-  return path.join(genLocalFolder(storyItem.id), 'index.json')
+  return path.join(genLocalFolder(`manifest/${storyItem.id}`), 'index.json')
 }
 
 const setManifestStoryData = storyItem => {
@@ -124,8 +125,23 @@ const setManifestStoryData = storyItem => {
    return true 
 }
 
+const getGroupChapterpath = option => {
+  return path.join(genLocalFolder(`group`), option.groupFN)
+}
+
+const setGroupChapterData = option => {
+  try {
+    fs.writeFileSync(getGroupChapterpath(option), JSON.stringify(option.group), 'utf-8')
+  } catch (error) {
+    console.log('setGroupChapterData', error)
+    return false 
+  }
+  return true
+}
+
 export {
-  axios,
+  axiosProxy,
+  axiosNomal,
   cheerioLoad,
   trimValue,
   getHash,
@@ -134,5 +150,6 @@ export {
   upFolder2Git,
   genLocalFolder,
   getManifestStoryPath,
-  setManifestStoryData
+  setManifestStoryData,
+  setGroupChapterData
 }

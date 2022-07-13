@@ -3,7 +3,7 @@ const url = 'https://truyen.tangthuvien.vn/story/chapters?story_id=17299'
 const sitemap = 'https://truyen.tangthuvien.vn/sitemap.xml'
 import { load as cheerioLoad } from 'cheerio'
 // import { HttpsProxyAgent } from 'https-proxy-agent'
-import { trimValue, axios, upFolder2Git } from '../../utility/index'
+import { trimValue, axiosProxy, upFolder2Git } from '../../utility/index'
 import { getLinksFromSitemap } from './sitemap'
 import { getStoryFromSLink } from './story'
 import { syncManifest } from './manifest'
@@ -40,12 +40,12 @@ import { syncManifest } from './manifest'
 // }
 
 // const main = async () => {
-//   // const { data } = await axios.get(url)
+//   // const { data } = await axiosProxy.get(url)
 //   // getChapters(data)
-//   // const { data } = await axios.get(sitemap)
+//   // const { data } = await axiosProxy.get(sitemap)
 //   // getStories(data)
 
-//   // const { data } = await axios.get('http://api64.ipify.org/?format=json', {
+//   // const { data } = await axiosProxy.get('http://api64.ipify.org/?format=json', {
 //   //   proxy: false,
 //   //   httpsAgent: new HttpsProxyAgent('http://207.148.123.54:32022')
 //   //   // proxy: {

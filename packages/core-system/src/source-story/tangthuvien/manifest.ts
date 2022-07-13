@@ -1,18 +1,49 @@
 import {
   forceFunction,
-  axios,
+  axiosProxy,
+  axiosNomal,
   cheerioLoad,
   trimValue,
   getHash,
-  setManifestStoryData
+  setManifestStoryData,
+  getManifestStoryPath,
+  setGroupChapterData
 } from '../../utility/index'
 
 const getManifestContent = async manifestLink => {
-  const { data } = await forceFunction(() => axios.get(manifestLink))
+  const { data } = await forceFunction(() => axiosProxy.get(manifestLink))
   if (typeof data === 'string') {
     return JSON.parse(data)
   }
   return data
+}
+
+const groupAndIndex = async (manifest) => {
+  for (const chItem of manifest.chapters) {
+    const { data } = await axiosNomal.post('http://127.0.0.1:2020/group-and-index', {
+      // { key: '' manifestPath: '', story: '', chapter: '' }
+      key: manifest.outsideSVC,
+      manifestPath: getManifestStoryPath(manifest),
+      story: Object.assign({}, {
+        id: manifest.id,
+        sId: manifest.sId,
+        name: manifest.name,
+        chapterPathRaw: manifest.chapterPathRaw,
+        outsideChaptersLength: manifest.outsideChaptersLength,
+        insideChaptersLength: manifest.insideChaptersLength,
+        insideChaptersContentLength: manifest.insideChaptersContentLength,
+        outsideSrc: manifest.outsideSrc,
+        outsideSVC: manifest.outsideSVC,
+        language: manifest.language
+      }),
+      chapter: chItem,
+    })
+    if (data?.group) {
+      setGroupChapterData(data)
+    } else {
+      chItem.groupFN = data
+    }
+  }
 }
 
 const syncManifest = async storyItem => {
@@ -38,7 +69,7 @@ const syncManifest = async storyItem => {
     });
 
 
-    const { data } = await forceFunction(() => axios.get(encodeURI(
+    const { data } = await forceFunction(() => axiosProxy.get(encodeURI(
       `https://truyen.tangthuvien.vn/story/chapters?story_id=${storyItem.sId}`
     )))
     const $ = cheerioLoad(data)
@@ -66,6 +97,7 @@ const syncManifest = async storyItem => {
       }
     })
     manifest.chapters = manifest.chapters.sort((a, b) => a.index < b.index ? -1 : (a.index === b.index ? 0 : 1))
+    await groupAndIndex(manifest)
     setManifestStoryData(manifest)
     return manifest.chapters.length
   } catch (error) {
