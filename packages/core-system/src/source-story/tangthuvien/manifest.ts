@@ -4,9 +4,6 @@ import {
   cheerioLoad,
   trimValue,
   getHash,
-  getSlug,
-  genLocalFolder,
-  getManifestStoryPath,
   setManifestStoryData
 } from '../../utility/index'
 
@@ -24,9 +21,7 @@ const syncManifest = async storyItem => {
    * clone/ file raw git >> gán path cho story:db
   */
   try {
-    const localFolderPath = genLocalFolder(storyItem.id)
-    console.log('localFolderPath', localFolderPath)
-
+    console.log('sync:Manifest |', storyItem.name)
     let manifest = storyItem
     if (storyItem.chapterPathRaw) {
       manifest = await getManifestContent(storyItem.chapterPathRaw)
