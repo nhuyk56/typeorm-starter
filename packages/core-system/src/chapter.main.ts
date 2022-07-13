@@ -43,7 +43,7 @@ const reset = async () => {
     r += stories.length
     stories.forEach(s => {
       s.insideChaptersLength = s.insideChaptersContentLength || null
-      console.log('reset', s.name)
+      console.log('RESET:', s.name)
     })
     await Promise.all(stories.map(s => storyRepository.save(s)))
   }
@@ -54,17 +54,17 @@ const main = async () => {
   if (StoryUtil) {
     if (args.force) {
       console.log('args.force', args.force)
-      console.log("START RESET")
+      console.log("---START RESET---")
       const r =  await reset()
       console.log(`RESET ${r} items`)
-      console.log("END RESET")
+      console.log("---END RESET---")
     }
     const storyRepository = AppDataSource.getRepository(Story)
     while(true) {
       const stories = await storyRepository
         .createQueryBuilder('sto')
         .where(`(sto."insideChaptersLength" <> sto."outsideChaptersLength") or (sto."insideChaptersLength" is NULL and sto."outsideChaptersLength" is not NULL)`)
-        .limit(10)
+        .limit(1000)
         .getMany()
       console.log(stories.length)
       if (!stories.length) break
