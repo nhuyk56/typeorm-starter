@@ -72,7 +72,7 @@ const main = async () => {
         })
         .limit(1000)
         .getMany()
-      console.log(stories.length)
+      console.log('sync manifes', args.target, stories.length)
       if (!stories.length) break
       await Promise.all(stories.map(s => init(s)))
     }
