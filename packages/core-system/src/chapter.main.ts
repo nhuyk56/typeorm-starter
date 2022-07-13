@@ -30,7 +30,7 @@ const main = async () => {
       const stories = await storyRepository
         .createQueryBuilder('sto')
         .where(`(sto."insideChaptersLength" <> sto."outsideChaptersLength") or (sto."insideChaptersLength" is NULL and sto."outsideChaptersLength" is not NULL)`)
-        .limit(1)
+        .limit(10)
         .getMany()
       console.log(stories.length)
       if (!stories.length) break
