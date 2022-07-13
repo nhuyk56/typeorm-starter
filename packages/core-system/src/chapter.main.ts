@@ -37,6 +37,9 @@ const reset = async () => {
       .where(`sto."outsideChaptersLength" is not NULL`)
       .andWhere(`sto."outsideChaptersLength" = sto."insideChaptersLength"`)
       .andWhere(`(sto."insideChaptersContentLength" is null or sto."outsideChaptersLength" != sto."insideChaptersContentLength")`)
+      .andWhere(`sto.outsideSVC = :...outsideSVC`, {
+        outsideSVC: [args.target]
+      })
       .limit(100)
       .getMany()
     if (!stories.length) break
@@ -64,6 +67,9 @@ const main = async () => {
       const stories = await storyRepository
         .createQueryBuilder('sto')
         .where(`(sto."insideChaptersLength" <> sto."outsideChaptersLength") or (sto."insideChaptersLength" is NULL and sto."outsideChaptersLength" is not NULL)`)
+        .andWhere(`sto.outsideSVC = :...outsideSVC`, {
+          outsideSVC: [args.target]
+        })
         .limit(1000)
         .getMany()
       console.log(stories.length)
