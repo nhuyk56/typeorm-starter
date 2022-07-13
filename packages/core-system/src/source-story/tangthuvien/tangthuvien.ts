@@ -6,7 +6,7 @@ import { load as cheerioLoad } from 'cheerio'
 import { trimValue, axios, upFolder2Git } from '../../utility/index'
 import { getLinksFromSitemap } from './sitemap'
 import { getStoryFromSLink } from './story'
-import { getChapters } from './chapter'
+import { syncManifest } from './manifest'
 
 // sitemap >> [slink] >> slink >> story >> chapters >> [chapter]
 
@@ -71,7 +71,7 @@ import { getChapters } from './chapter'
 
 // main()
 
-getChapters({
+syncManifest({
   id: '142b8adb82662a236375e853cd011163',
   sId: '35864',
   name: 'Người Khác Ngự Thú Ta Ngự Yêu (Biệt Nhân Ngự Thú Ngã Ngự Yêu)',

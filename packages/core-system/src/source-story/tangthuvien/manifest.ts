@@ -18,7 +18,7 @@ const getManifestContent = async manifestLink => {
   return data
 }
 
-const syncChapters = async storyItem => {
+const syncManifest = async storyItem => {
   /**
    * make folder with id
    * clone/ file raw git >> gán path cho story:db
@@ -79,5 +79,5 @@ const syncChapters = async storyItem => {
 }
 
 export {
-  syncChapters
+  syncManifest
 }
