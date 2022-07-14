@@ -10,7 +10,7 @@ import path from 'path';
 const proxyOptions = `socks5://45.77.250.86:9050`;
 const agent = new SocksProxyAgent(proxyOptions);
 
-const trimValue = s => String(s || '').trim()
+const trimValue = s => String(s || '')?.trim()?.normalize()
 const getHash = s => s && md5(trimValue(s)).toString()
 const axiosProxy = Axios.create({ httpAgent: agent, httpsAgent: agent, timeout: 60000 });
 const axiosNomal = Axios
@@ -139,6 +139,35 @@ const setGroupChapterData = option => {
   return true
 }
 
+const getGroupFD = option => {
+  // .groupFD: 1657798535961-40.json >> 1657798535961-40
+  // .chapterFN: chapterId
+  return path.join(
+    genLocalFolder(`group/${option?.groupFD}`),
+    option?.chapterFN
+  )
+}
+
+const setGroupFDData = option => {
+  // .groupFD: 1657798535961-40.json >> 1657798535961-40
+  // .chapterFN: chapterId
+  // .chapterContent: content
+  try {
+    fs.writeFileSync(getGroupFD(option), option.chapterContent, 'utf-8')
+  } catch (error) {
+    console.log('setGroupFDData', error)
+    return false 
+  }
+  return true
+}
+
+const readDataFN = (fnp) => fs.readFileSync(fnp, 'utf-8')
+const isExistsFN = (fnp) => fs.existsSync(fnp)
+
+const unmaskChapterName = (chapterName) => (
+  getSlug(chapterName?.split('\n')?.shift()?.split(':')?.pop()?.split(' ')?.join('')?.toLowerCase() || '')
+)
+
 export {
   axiosProxy,
   axiosNomal,
@@ -151,5 +180,11 @@ export {
   genLocalFolder,
   getManifestStoryPath,
   setManifestStoryData,
-  setGroupChapterData
+  getGroupChapterpath,
+  setGroupChapterData,
+  setGroupFDData,
+  getGroupFD,
+  readDataFN,
+  isExistsFN,
+  unmaskChapterName
 }

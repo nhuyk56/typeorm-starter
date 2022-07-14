@@ -13,6 +13,7 @@ case all
 cmd process group, download chapter files
   + -fnp=path/to/fn.json
   + after done, i have files with name is (Md5 Id)
+  + generate json total group
 cmd upload git
   + call upload git function
   + after upload git >> generate files _general_/git/Md5Id.git.txt (chapter)

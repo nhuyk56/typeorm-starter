@@ -20,7 +20,8 @@ const getManifestContent = async manifestLink => {
 
 const groupAndIndex = async (manifest) => {
   for (const chItem of manifest.chapters) {
-    const { data } = await axiosNomal.post('http://127.0.0.1:2020/group-and-index', {
+    if (chItem.contentPathRaw) continue
+    const { data } = await forceFunction(() => axiosNomal.post('http://127.0.0.1:2020/group-and-index', {
       // { key: '' manifestPath: '', story: '', chapter: '', max: '', all }
       key: manifest.outsideSVC,
       manifestPath: getManifestStoryPath(manifest),
@@ -38,7 +39,7 @@ const groupAndIndex = async (manifest) => {
       }),
       chapter: chItem,
       max: 1000
-    })
+    }))
     if (data?.group) {
       setGroupChapterData(data)
     } else {
@@ -80,7 +81,7 @@ const syncManifest = async storyItem => {
         index: i,
         id: null,
         sId: trimValue($(li).attr('ng-chap')),
-        name: trimValue($(li).find('.chapter-text').text()),        
+        name: trimValue($(li).find('.chapter-text').text()),
         outsideSrc: trimValue($(li).find('a').attr('href')),
         outsideSVC: 'tangthuvien',
         language: 'vi',
