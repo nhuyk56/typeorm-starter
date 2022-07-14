@@ -72,18 +72,13 @@ app.get('/send-baggage', function(req, res) {
   const GFD = `group-${payload.key}-FN`
   if (!baggages[GFD]) baggages[GFD] = `${new Date().getTime()}-${GFD.length + (payload?.chapter?.name?.length || 0 )}.json`
   if (!baggages[GK]) baggages[GK] = []
-  if (payload.all) {
-    const group = JSON.parse(JSON.stringify(baggages[GK]))
-    baggages[GFD] = null
-    baggages[GK] = []
-    res.send(group)
-    return /** exit */
-  }
 
   /** inject localFolder */
-  payload.groupFN = baggages[GFD]
-  baggages[GK].push(payload)
-  if (baggages[GK].length >= payload.max) {
+  !!payload?.chapter && baggages[GK].push({
+    groupFN: baggages[GFD],
+    ...payload
+  })
+  if (baggages[GK].length >= payload.max || payload.all) {
     console.log(`${payload.key}:[${baggages[GK].length}]: ${baggages[GFD]} `)
     const groupFN = baggages[GFD]
     baggages[GFD] = null
