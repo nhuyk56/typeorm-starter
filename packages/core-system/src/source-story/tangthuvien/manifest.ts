@@ -18,6 +18,21 @@ const getManifestContent = async manifestLink => {
   return data
 }
 
+const groupAndIndexLast = async (outsideSVC) => { /** outsideSVC from arg.target */
+  const { data } = await forceFunction(() => axiosNomal.post(
+    'http://127.0.0.1:2020/group-and-index', {
+      key: outsideSVC,
+      all:  true
+    }
+  ))
+  if (data?.group) {
+    console.log('groupAndIndexLast', outsideSVC, data?.group?.length)
+    setGroupChapterData(data)
+  } else {
+    console.log('groupAndIndexLast', outsideSVC, 'empty')
+  }
+}
+
 const groupAndIndex = async (manifest) => {
   for (const chItem of manifest.chapters) {
     if (chItem.contentPathRaw) continue
@@ -108,5 +123,6 @@ const syncManifest = async storyItem => {
 }
 
 export {
-  syncManifest
+  syncManifest,
+  groupAndIndexLast
 }

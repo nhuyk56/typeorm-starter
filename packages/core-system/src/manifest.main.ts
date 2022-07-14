@@ -76,6 +76,8 @@ const main = async () => {
       if (!stories.length) break
       await Promise.all(stories.map(s => init(s)))
     }
+    /** những gì còn dư ra */
+    await StoryUtil.groupAndIndexLast(args.target)
   } else {
     throw new Error(`target: ${args.target} has not UTIL`)
   }

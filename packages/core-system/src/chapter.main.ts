@@ -21,7 +21,7 @@ const init = async () => {
   let items = []
   for (const item of groups) {
     items.push(item)
-    if (items.length === 10) { //15 task * 10
+    if (items.length === 1000) { //15 task * 10
       await Promise.all(items.map(item => UTIL[item.key].syncChapter(item)))
       items = []
     }
