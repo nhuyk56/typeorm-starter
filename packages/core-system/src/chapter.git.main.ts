@@ -12,7 +12,7 @@ import {
 const args = require('args-parser')(process.argv)
 
 if (!args.gitSSH) {
-  args.gitSSH = "git@github.com----nhuyk56:nhuyk56/SyncStorage1.git"
+  throw new Error('Missing git SSH')
 }
 
 console.log('args', args)
@@ -46,4 +46,4 @@ const init = async () => {
 }
 
 init()
-// npm run chapter:git:main gfn=path/to/file
+// npm run chapter:git:main gfn=1657884429324-50.json gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git
