@@ -6,7 +6,8 @@ import {
   readDir,
   getChapterGitPath,
   setChapterGitData,
-  getHash
+  getHash,
+  isDeleteFN
 } from './utility/index'
 
 const args = require('args-parser')(process.argv)
@@ -31,7 +32,7 @@ const init = async () => {
     errorPath: getErrorPath(),
     gitSSH: args.gitSSH,
     brand: getHash(groupFNPath),
-    // removeFolder: true /** live */
+    removeFolder: true /** live */
   })
 
   readDir(groupFNPath).forEach(chapterId => {
