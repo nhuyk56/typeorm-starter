@@ -34,12 +34,10 @@ const init = async () => {
     // removeFolder: true /** live */
   })
 
-  const chapters = readDir(groupFNPath).map(chapterId => {
+  readDir(groupFNPath).forEach(chapterId => {
     console.log(`${brandRaw}${chapterId}`) /** DEBUG */
     setChapterGitData({ FN: chapterId, data: `${brandRaw}${chapterId}` })
-    return `${brandRaw}${chapterId}`
   })
-  return chapters
 }
 
 init()
