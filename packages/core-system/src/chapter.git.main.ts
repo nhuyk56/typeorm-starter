@@ -5,7 +5,8 @@ import {
   getErrorPath,
   readDir,
   getChapterGitPath,
-  setChapterGitData
+  setChapterGitData,
+  getHash
 } from './utility/index'
 
 const args = require('args-parser')(process.argv)
@@ -27,12 +28,12 @@ const init = async () => {
     folderPath: groupFNPath,
     errorPath: getErrorPath(),
     gitSSH: "git@github.com----nhuyk56:nhuyk56/SyncStorage1.git",
-    brand: null, /** auto */
+    brand: getHash(groupFNPath),
     // removeFolder: true /** live */
   })
 
   const chapters = readDir(groupFNPath).map(chapterId => {
-    console.log(`${brandRaw}${chapterId}`)
+    console.log(`${brandRaw}${chapterId}`) /** DEBUG */
     setChapterGitData({ FN: chapterId, data: `${brandRaw}${chapterId}` })
     return `${brandRaw}${chapterId}`
   })

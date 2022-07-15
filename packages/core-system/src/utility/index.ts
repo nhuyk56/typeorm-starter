@@ -85,9 +85,9 @@ const upFolder2Git = async (option) => {
   const pushMessage = shell.exec(warnCLI(`git push -f --set-upstream origin ${option.brand}`), getShellOption(option.folderPath))
   if (pushMessage.code === 0) {
     if (option.removeFolder) {
-      shell.exec(warnCLI(`rm -rf ${option.folderPath}`), getShellOption(option.folderPath))
+      shell.exec(warnCLI(`rm -rf "${option.folderPath}"`), getShellOption(option.folderPath))
     } else {
-      shell.exec(warnCLI(`rm -rf ${path.join(option.folderPath, '.git')}`), getShellOption(option.folderPath))
+      shell.exec(warnCLI(`rm -rf "${path.join(option.folderPath, '.git')}"`), getShellOption(option.folderPath))
     }
     const [userName, gitName] = option.gitSSH.replace(/^(.*):|\.git/gm, '').split('/')
     const brandRaw = `https://raw.githubusercontent.com/${userName}/${gitName}/${option.brand}/`
