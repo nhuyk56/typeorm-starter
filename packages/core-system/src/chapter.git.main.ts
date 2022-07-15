@@ -10,6 +10,11 @@ import {
 } from './utility/index'
 
 const args = require('args-parser')(process.argv)
+
+if (!args.gitSSH) {
+  args.gitSSH = "git@github.com----nhuyk56:nhuyk56/SyncStorage1.git"
+}
+
 console.log('args', args)
 // inject env
 Object.keys(args).forEach(k => {
@@ -27,7 +32,7 @@ const init = async () => {
   const brandRaw = await upFolder2Git({
     folderPath: groupFNPath,
     errorPath: getErrorPath(),
-    gitSSH: "git@github.com----nhuyk56:nhuyk56/SyncStorage1.git",
+    gitSSH: args.gitSSH,
     brand: getHash(groupFNPath),
     // removeFolder: true /** live */
   })
