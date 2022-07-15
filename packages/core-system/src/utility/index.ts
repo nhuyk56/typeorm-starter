@@ -31,7 +31,7 @@ const forceFunction = async callback => {
 //   folderPath: 'C:/Users/YNN/AppData/Local/Temp/folderTest',
 //   errorPath: 'C:/Users/YNN/AppData/Local/Temp/errorFolder',
 //   gitSSH: 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git',
-//   // brand: 'brandtest1', archived
+//   brand: 'brandtest1', /** can null */
 //   removeFolder: true
 // })
 const upFolder2Git = async (option) => {
@@ -95,7 +95,7 @@ const upFolder2Git = async (option) => {
     return brandRaw
   } else {
     console.log(pushMessage)
-    shell.exec(warnCLI(`rm -rf ${path.join(option.folderPath, '.git')}`), getShellOption(option.folderPath))
+    shell.exec(warnCLI(`rm -rf "${path.join(option.folderPath, '.git')}"`), getShellOption(option.folderPath))
     fs.writeFileSync(option.errorPath, JSON.stringify(pushMessage), {encoding: "utf8"})
   }
   return false
@@ -114,6 +114,8 @@ const genLocalFolder = folderName => {
 const getManifestStoryPath = storyItem => {
   return path.join(genLocalFolder(`manifest/${storyItem.id}`), 'index.json')
 }
+
+const getErrorPath = () => genLocalFolder(`error`)
 
 const setManifestStoryData = storyItem => {
   try {
@@ -161,12 +163,27 @@ const setGroupFDData = option => {
   return true
 }
 
+const readDir = (dir) => fs.readdirSync(dir)
 const readDataFN = (fnp) => fs.readFileSync(fnp, 'utf-8')
 const isExistsFN = (fnp) => fs.existsSync(fnp)
 
 const unmaskChapterName = (chapterName) => (
   getSlug(chapterName?.split('\n')?.shift()?.split(':')?.pop()?.split(' ')?.join('')?.toLowerCase() || '')
 )
+
+const getChapterGitPath = option => {
+  return path.join(genLocalFolder(`git`), option.FN)
+}
+
+const setChapterGitData = option => {
+  try {
+    fs.writeFileSync(getChapterGitPath(option), option.data, 'utf-8')
+  } catch (error) {
+    console.log('setChapterGitData', error)
+    return false 
+  }
+  return true
+}
 
 export {
   axiosProxy,
@@ -186,5 +203,9 @@ export {
   getGroupFD,
   readDataFN,
   isExistsFN,
-  unmaskChapterName
+  unmaskChapterName,
+  getErrorPath,
+  readDir,
+  getChapterGitPath,
+  setChapterGitData
 }
