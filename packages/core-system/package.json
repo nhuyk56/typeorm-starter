@@ -29,6 +29,7 @@
     "manifest:main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/manifest.main",
     "chapter:main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/chapter.main",
     "chapter:git:main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/chapter.git.main",
+    "manifest:git:main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/manifest.git.main",
     "testproxy": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node testproxy.ts"
   }
 }

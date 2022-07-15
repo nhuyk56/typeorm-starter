@@ -111,6 +111,8 @@ const genLocalFolder = folderName => {
   return pathLocalFolderChapter
 }
 
+const getManifestPath = () => genLocalFolder(`manifest`)
+
 const getManifestStoryPath = storyItem => {
   return path.join(genLocalFolder(`manifest/${storyItem.id}`), 'index.json')
 }
@@ -207,5 +209,6 @@ export {
   getErrorPath,
   readDir,
   getChapterGitPath,
-  setChapterGitData
+  setChapterGitData,
+  getManifestPath
 }
