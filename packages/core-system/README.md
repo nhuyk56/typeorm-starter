@@ -22,4 +22,7 @@ cmd sync manifest
   + update manifest git >> generate files _general_/git/Md5Id.git.txt (story)
   + update story db
 ----------------------------------------------------------
-
+npm run story:main target=tangthuvien
+npm run manifest:main target=tangthuvien force
+npm run chapter:main gfn=1657884429324-50.json
+npm run chapter:git:main gfn=1657884429324-50.json gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git
