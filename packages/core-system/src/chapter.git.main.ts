@@ -10,12 +10,8 @@ import {
 } from './utility/index'
 
 const args = require('args-parser')(process.argv)
-
-if (!args.gitSSH) {
-  throw new Error('Missing git SSH')
-}
-
 console.log('args', args)
+
 // inject env
 Object.keys(args).forEach(k => {
   if (!process.env[k]) {
@@ -25,6 +21,7 @@ Object.keys(args).forEach(k => {
 
 const init = async () => {
   if (!args.gfn) throw new Error('MISSING gfn option')
+  if (!args.gitSSH) throw new Error('Missing git SSH')
   const groupFN = args.gfn?.split('.')?.shift()
   const groupFNPath = getGroupChapterpath({ groupFN })
 
