@@ -92,10 +92,15 @@ const init = async (storyId) => {
 const main = async () => {
   if (!args.gitSSH) throw new Error('Missing git SSH')
   const storiesId = readDir(getManifestPath())
+  var all = []
   for (const storyId of storiesId) {
-    await init('e74d9759144a108d2950e423c98c5cf5')
-    return
+    all.push(init(storyId))
+    if (all.length === 100) {
+      await Promise.all(all)
+      all = []
+    }
   }
+  await Promise.all(all)
 }
 
 AppDataSource.initialize().then(main).catch(error => {
