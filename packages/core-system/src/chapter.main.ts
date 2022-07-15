@@ -108,4 +108,4 @@ init()
 //   console.log(error)
 // })
 
-// npm run chapter:main target=tangthuvien force
+// npm run chapter:main gfn=path/to/file
