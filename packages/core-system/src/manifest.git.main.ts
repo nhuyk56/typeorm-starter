@@ -2,6 +2,22 @@ import { AppDataSource } from "./data-source"
 import { Story } from "./entity/Story";
 import { In } from "typeorm";
 import * as UTIL from './source-story'
+import {
+  getGroupChapterpath,
+  upFolder2Git,
+  getErrorPath,
+  readDir,
+  getManifestPath,
+  getManifestStoryPath,
+  getManifestStoryFolderPath,
+  readDataFN,
+  isExistsFN,
+  getChapterGitPath,
+  setManifestStoryData,
+  setChapterGitData,
+  getHash,
+  isDeleteFN
+} from './utility/index'
 
 const args = require('args-parser')(process.argv)
 console.log('args', args)
@@ -13,78 +29,77 @@ Object.keys(args).forEach(k => {
 })
 // const StoryUtil = UTIL?.[args.target]
 
-// const init = async (storyItem) => {
-//   const icl = await StoryUtil.syncManifest(
-//     JSON.parse(
-//       JSON.stringify(storyItem)
-//     )
-//   )
-//   const storyRepository = AppDataSource.getRepository(Story)
-//   await storyRepository.save({
-//     id: storyItem.id,
-//     outsideChaptersLength: icl,
-//     insideChaptersLength: icl
-//   })
-//   console.log(`handle manifest ${storyItem.id}:${storyItem.name} success`)
-// }
+const init = async (storyId) => {
+  const manifestStoryFolderPath = getManifestStoryFolderPath({ id: storyId })
+  const manifestStoryPath = getManifestStoryPath({ id: storyId })
+  if (!isExistsFN(manifestStoryPath)) {
+    console.log(`[MANIFEST.GIT]: ${manifestStoryPath}, not found`)
+    return
+  }
+  const rawStory = readDataFN(manifestStoryPath)
+  const story = JSON.parse(rawStory)
+  const chapters = JSON.parse(JSON.stringify(story)).chapters
+  chapters.forEach(ch => {
+    const chapterGitPath = getChapterGitPath({ FN: ch.id })
+    if (isExistsFN(chapterGitPath)) {
+      ch.contentPathRaw = readDataFN(chapterGitPath)
+      isDeleteFN(chapterGitPath)
+    }
+  })
+  const storyRepository = AppDataSource.getRepository(Story)
+  const storiesDB = await storyRepository.findBy({ id: storyId })
+  const storyDB = storiesDB?.pop()
+  if (!storyDB) {
+    console.log(`[MANIFEST.GIT]: ${manifestStoryPath}, not found in storyDB`)
+    return
+  }
+  const dataStoryUpdate = {
+    id: storyId,
+    outsideChaptersLength: chapters.length,
+    insideChaptersLength: chapters.length,
+    insideChaptersContentLength: chapters.length,
+    chapterPathRaw: storyDB.chapterPathRaw /** ?? */
+  }
 
-// const reset = async () => {
-//   let r = 0
-//   const storyRepository = AppDataSource.getRepository(Story)
-//   while(true) {
-//     const stories = await storyRepository
-//       .createQueryBuilder('sto')
-//       .where(`sto."outsideChaptersLength" is not NULL`)
-//       .andWhere(`sto."outsideChaptersLength" = sto."insideChaptersLength"`)
-//       .andWhere(`(sto."insideChaptersContentLength" is null or sto."outsideChaptersLength" != sto."insideChaptersContentLength")`)
-//       .andWhere(`sto.outsideSVC = :...outsideSVC`, {
-//         outsideSVC: [args.target]
-//       })
-//       .limit(1000)
-//       .getMany()
-//     if (!stories.length) break
-//     r += stories.length
-//     stories.forEach(s => {
-//       s.insideChaptersLength = s.insideChaptersContentLength || null
-//       console.log('RESET:', s.name)
-//     })
-//     await Promise.all(stories.map(s => storyRepository.save(s)))
-//   }
-//   return r
-// }
+  const dataManifest = {
+    ...JSON.parse(JSON.stringify(storyDB)),
+    ...JSON.parse(JSON.stringify(dataStoryUpdate)),
+    ...JSON.parse(JSON.stringify({ chapters })),
+    chapterPathRaw: undefined, /** this me */
+    groupFN: undefined
+  }
+  setManifestStoryData(dataManifest)
+
+  console.log('UPFOLDER2GIT', manifestStoryFolderPath)
+  const brandRaw = await upFolder2Git({
+    folderPath: manifestStoryFolderPath,
+    errorPath: getErrorPath(),
+    gitSSH: args.gitSSH,
+    brand: storyId,
+    removeFolder: true /** live */
+  })
+
+  if (!dataStoryUpdate.chapterPathRaw) {
+    dataStoryUpdate.chapterPathRaw = `${brandRaw}index.json`
+  }
+  await storyRepository.save(dataStoryUpdate)
+  console.log(
+    `handle manifest:git:main ${storyDB.id}:${storyDB.name} success`,
+    `\n➥${dataStoryUpdate.chapterPathRaw}`
+  )
+}
 
 const main = async () => {
-  // if (StoryUtil) {
-  //   if (args.force) {
-  //     console.log('args.force', args.force)
-  //     console.log("---START RESET---")
-  //     const r =  await reset()
-  //     console.log(`RESET ${r} items`)
-  //     console.log("---END RESET---")
-  //   }
-  //   const storyRepository = AppDataSource.getRepository(Story)
-  //   while(true) {
-  //     const stories = await storyRepository
-  //       .createQueryBuilder('sto')
-  //       .where(`(sto."insideChaptersLength" <> sto."outsideChaptersLength") or (sto."insideChaptersLength" is NULL and sto."outsideChaptersLength" is not NULL)`)
-  //       .andWhere(`sto.outsideSVC = :...outsideSVC`, {
-  //         outsideSVC: [args.target]
-  //       })
-  //       .limit(100)
-  //       .getMany()
-  //     console.log('sync manifes', args.target, stories.length)
-  //     if (!stories.length) break
-  //     await Promise.all(stories.map(s => init(s)))
-  //   }
-  //   /** những gì còn dư ra */
-  //   await StoryUtil.groupAndIndexLast(args.target)
-  // } else {
-  //   throw new Error(`target: ${args.target} has not UTIL`)
-  // }
+  if (!args.gitSSH) throw new Error('Missing git SSH')
+  const storiesId = readDir(getManifestPath())
+  for (const storyId of storiesId) {
+    await init('e74d9759144a108d2950e423c98c5cf5')
+    return
+  }
 }
 
 AppDataSource.initialize().then(main).catch(error => {
   console.log(error)
 })
 
-// npm run manifest:git:main gfn=0abcd63a3897f9cfaa0b754ce1d3f829 gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git
+// npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git

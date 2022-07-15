@@ -113,6 +113,8 @@ const genLocalFolder = folderName => {
 
 const getManifestPath = () => genLocalFolder(`manifest`)
 
+const getManifestStoryFolderPath = (storyItem) => genLocalFolder(`manifest/${storyItem.id}`)
+
 const getManifestStoryPath = storyItem => {
   return path.join(genLocalFolder(`manifest/${storyItem.id}`), 'index.json')
 }
@@ -168,6 +170,7 @@ const setGroupFDData = option => {
 const readDir = (dir) => fs.readdirSync(dir)
 const readDataFN = (fnp) => fs.readFileSync(fnp, 'utf-8')
 const isExistsFN = (fnp) => fs.existsSync(fnp)
+const isDeleteFN = (fnp) => fs.unlinkSync(fnp)
 
 const unmaskChapterName = (chapterName) => (
   getSlug(chapterName?.split('\n')?.shift()?.split(':')?.pop()?.split(' ')?.join('')?.toLowerCase() || '')
@@ -198,6 +201,7 @@ export {
   upFolder2Git,
   genLocalFolder,
   getManifestStoryPath,
+  getManifestStoryFolderPath,
   setManifestStoryData,
   getGroupChapterpath,
   setGroupChapterData,
@@ -210,5 +214,6 @@ export {
   readDir,
   getChapterGitPath,
   setChapterGitData,
-  getManifestPath
+  getManifestPath,
+  isDeleteFN
 }

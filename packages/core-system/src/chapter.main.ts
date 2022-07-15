@@ -2,7 +2,7 @@ import { AppDataSource } from "./data-source"
 import { Story } from "./entity/Story";
 import { In } from "typeorm";
 import * as UTIL from './source-story'
-import { readDataFN, getGroupChapterpath } from './utility/index'
+import { readDataFN, getGroupChapterpath, isDeleteFN } from './utility/index'
 
 const args = require('args-parser')(process.argv)
 console.log('args', args)
@@ -15,7 +15,8 @@ Object.keys(args).forEach(k => {
 
 const init = async () => {
   if (!args.gfn) throw new Error('MISSING gfn option')
-  const dataRaw = readDataFN(getGroupChapterpath({ groupFN: args.gfn }))
+  const groupChapterpath = getGroupChapterpath({ groupFN: args.gfn })
+  const dataRaw = readDataFN(groupChapterpath)
   const groups = JSON.parse(dataRaw)
   console.log(`chapter:main:${groups.length}`)
   let items = []
@@ -30,6 +31,7 @@ const init = async () => {
     await Promise.all(items.map(item => UTIL[item.key].syncChapter(item)))
     items = []
   }
+  isDeleteFN(groupChapterpath)
 }
 
 init()
