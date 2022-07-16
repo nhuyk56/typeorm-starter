@@ -29,3 +29,4 @@ npm run chapter:git:main gfn=1657884429324-501111.json gitSSH=git@github.com----
 npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git
 
 max: 100 000/5 000 000 = 50Git
+check lai follow vai lan nua
