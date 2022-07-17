@@ -38,14 +38,14 @@ const storyMain = () => {
     setTaskData({
       FN: target + '.ps1',
       data: 
-      `${filesGroup.map(g => `./${g}\n`).join('')}\n`+
+      `Set-Location -Path ${process.cwd()}\n`+
+      `npm run story:main target=${target}\n`+
+      `Set-Location -Path ${getTaskFolderPath()}\n`+
       `del ${target}.ps1\n`+
       `timeout 5\n`+
       `${CHECK_TASK}\n`+
       `Set-Location -Path ${process.cwd()}\n`+
-      // `npm run upload-import-gcfa\n`+
-      // `npm run os-as\n`+
-      // `npm run os-ac\n`+
+      `npm run task:main scriptKey=manifest:main\n`+
       `exit`
     })
     execSync(`start ${target}.ps1`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
@@ -56,6 +56,7 @@ const init = async () => {
   const scriptKey = String(args.scriptKey || STARTSCRIPTKEY)
   const target = String(args.target || '')
   const taskNum = Number(args.taskNum || MAXTASKNUM)
+  console.log({ scriptKey, target, taskNum })
 
   const scriptKeys = {
     'story:main': storyMain,
