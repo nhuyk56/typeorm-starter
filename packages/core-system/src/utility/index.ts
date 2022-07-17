@@ -190,6 +190,23 @@ const setChapterGitData = option => {
   return true
 }
 
+const getTaskFolderPath = () => genLocalFolder('task')
+
+const getTaskPath = o => {
+  return path.join(genLocalFolder('task'), o.FN)
+}
+
+const setTaskData = o => {
+  try {
+    fs.writeFileSync(getTaskPath(o), o.data, 'utf-8')
+  } catch (error) {
+    console.log('setTaskData', error)
+    return false 
+  }
+   return true 
+}
+
+
 export {
   axiosProxy,
   axiosNomal,
@@ -215,5 +232,8 @@ export {
   getChapterGitPath,
   setChapterGitData,
   getManifestPath,
-  isDeleteFN
+  isDeleteFN,
+  getTaskPath,
+  setTaskData,
+  getTaskFolderPath
 }
