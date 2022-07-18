@@ -131,6 +131,8 @@ const setManifestStoryData = storyItem => {
    return true 
 }
 
+const getGroupFolderPath = () => genLocalFolder(`group`)
+
 const getGroupChapterpath = option => {
   return path.join(genLocalFolder(`group`), option.groupFN)
 }
@@ -235,5 +237,6 @@ export {
   isDeleteFN,
   getTaskPath,
   setTaskData,
-  getTaskFolderPath
+  getTaskFolderPath,
+  getGroupFolderPath
 }
