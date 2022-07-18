@@ -92,7 +92,7 @@ const chapterMain = () => {
     })
     
     /** group task */
-    tasks.push(groupName + '.ps1')
+    tasks.push(`"${groupName}.ps1"`)
     const isLast = chapterGroups[chapterGroups.length-1] === groupName
     if (tasks.length >= MAXTASK || isLast) {
       const gTask = JSON.parse(JSON.stringify({
@@ -101,7 +101,7 @@ const chapterMain = () => {
         `${tasks.join('\n')}\n`+
         `del G_Chapter_Main_${gTasks.length}.ps1\n`+
         `timeout 5\n`+
-        `${CHECK_TASK}`+
+        `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
         `npm run task:main scriptKey=chapter:git:main\n`+
         `exit`
@@ -133,7 +133,7 @@ const chapterGitMain = () => {
     })
     
     /** group task */
-    tasks.push(groupName + '.ps1')
+    tasks.push(`"${groupName}.ps1"`)
     const isLast = chapterGroups[chapterGroups.length-1] === groupName
     if (tasks.length >= MAXTASK || isLast) {
       const gTask = JSON.parse(JSON.stringify({
@@ -142,7 +142,7 @@ const chapterGitMain = () => {
         `${tasks.join('\n')}\n`+
         `del G_Chapter_Git_Main_${gTasks.length}.ps1\n`+
         `timeout 5\n`+
-        `${CHECK_TASK}`+
+        `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
         // `npm run task:main scriptKey=manifest:git:main\n`+ /** END */
         `npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
