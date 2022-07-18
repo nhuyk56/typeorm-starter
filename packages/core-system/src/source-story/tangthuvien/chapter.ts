@@ -1,7 +1,7 @@
 import {
   forceFunction,
   axiosProxy,
-  axiosNomal,
+  axiosNormal,
   cheerioLoad,
   trimValue,
   isExistsFN,
