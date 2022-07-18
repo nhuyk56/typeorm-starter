@@ -13,7 +13,7 @@ const agent = new SocksProxyAgent(proxyOptions);
 const trimValue = s => String(s || '')?.trim()?.normalize()
 const getHash = s => s && md5(trimValue(s)).toString()
 const axiosProxy = Axios.create({ httpAgent: agent, httpsAgent: agent, timeout: 60000 });
-const axiosNomal = Axios
+const axiosNormal = Axios
 
 const forceFunction = async callback => {
   let times = 100
@@ -209,7 +209,7 @@ const setTaskData = o => {
 
 export {
   axiosProxy,
-  axiosNomal,
+  axiosNormal,
   cheerioLoad,
   trimValue,
   getHash,

@@ -1,7 +1,7 @@
 import {
   forceFunction,
   axiosProxy,
-  axiosNomal,
+  axiosNormal,
   cheerioLoad,
   trimValue,
   getHash,
@@ -19,7 +19,7 @@ const getManifestContent = async manifestLink => {
 }
 
 const groupAndIndexLast = async (outsideSVC) => { /** outsideSVC from arg.target */
-  const { data } = await forceFunction(() => axiosNomal.post(
+  const { data } = await forceFunction(() => axiosNormal.post(
     'http://127.0.0.1:2020/group-and-index', {
       key: outsideSVC,
       all:  true
@@ -36,7 +36,7 @@ const groupAndIndexLast = async (outsideSVC) => { /** outsideSVC from arg.target
 const groupAndIndex = async (manifest) => {
   for (const chItem of manifest.chapters) {
     if (chItem.contentPathRaw) continue
-    const { data } = await forceFunction(() => axiosNomal.post('http://127.0.0.1:2020/group-and-index', {
+    const { data } = await forceFunction(() => axiosNormal.post('http://127.0.0.1:2020/group-and-index', {
       // { key: '' manifestPath: '', story: '', chapter: '', max: '', all }
       key: manifest.outsideSVC,
       manifestPath: getManifestStoryPath(manifest),
