@@ -70,7 +70,7 @@ app.get('/send-baggage', function(req, res) {
   if (!payload.key) return false
   const GK = `group-${payload.key}`
   const GFD = `group-${payload.key}-FN`
-  if (!baggages[GFD]) baggages[GFD] = `${new Date().getTime()}-${GFD.length + (payload?.chapter?.name?.length || 0 )}.json`
+  if (!baggages[GFD]) baggages[GFD] = `${new Date().getTime()}-${GFD.length + (payload?.chapter?.name?.length || 0 )}.${payload.key}.json`
   if (!baggages[GK]) baggages[GK] = []
 
   /** inject localFolder */

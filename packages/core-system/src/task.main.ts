@@ -74,43 +74,28 @@ const manifestMain = () => {
 
 const chapterMain = () => {
   const getgroupFolderPath = getGroupFolderPath()
-  let tasks = [], gTasks = []
-  const chapterGroups = readDir(getgroupFolderPath).filter(groupName => groupName.includes('.json'))
-  const MAXTASK = Math.round(chapterGroups.length/15)
-  const CHECK_TASK = Array.from(
-    Array(MAXTASK + 2).keys()
-  ).map(t => `if (Test-Path -Path G_Chapter_Main_${t}.ps1 -PathType Leaf) { exit }`).join('\n')
-  chapterGroups.forEach(groupName => {
-    console.log('task:', groupName)
+  const CHECK_TASK = TARGETKEYS.map(t => `if (Test-Path -Path ${getTaskPath({ FN: t + '.ps1' })} -PathType Leaf) { exit }`).join('\n')
+  for (const target of TARGETKEYS) {
+    const chapterGroupCmd = readDir(getgroupFolderPath)
+                        .filter(groupName => groupName.includes(`.${target}.json`))
+                        .map(groupName => `npm run chapter:main target=${target} gfn=${groupName}`)
+                        .join('\n')
+
     setTaskData({
-      FN: groupName + '.ps1',
+      FN: target + '.ps1',
       data: 
       `Set-Location -Path ${process.cwd()}\n`+
-      `npm run chapter:main gfn=${groupName}\n`+
+      `${chapterGroupCmd}\n`+
       `Set-Location -Path ${getTaskFolderPath()}\n`+
-      `del ${groupName}.ps1\n`
+      `del ${target}.ps1\n`+
+      `timeout 5\n`+
+      `${CHECK_TASK}\n`+
+      `Set-Location -Path ${process.cwd()}\n`+
+      `npm run task:main scriptKey=chapter:git:main\n`+
+      `exit`
     })
-    
-    /** group task */
-    tasks.push(`"${groupName}.ps1"`)
-    const isLast = chapterGroups[chapterGroups.length-1] === groupName
-    if (tasks.length >= MAXTASK || isLast) {
-      const gTask = JSON.parse(JSON.stringify({
-        FN: `G_Chapter_Main_${gTasks.length}.ps1`,
-        data: 
-        `${tasks.join('\n')}\n`+
-        `del G_Chapter_Main_${gTasks.length}.ps1\n`+
-        `timeout 5\n`+
-        `${CHECK_TASK}\n`+
-        `Set-Location -Path ${process.cwd()}\n`+
-        `npm run task:main scriptKey=chapter:git:main\n`+
-        `exit`
-      }))
-      setTaskData(gTask)
-      tasks = []
-      execSync(`start ${gTask.FN}`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
-    }
-  })
+    execSync(`start ${target}.ps1`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
+  }
 }
 
 const chapterGitMain = () => {
@@ -133,13 +118,13 @@ const chapterGitMain = () => {
     })
     
     /** group task */
-    tasks.push(`"${groupName}.ps1"`)
+    tasks.push(`${groupName}.ps1`)
     const isLast = chapterGroups[chapterGroups.length-1] === groupName
     if (tasks.length >= MAXTASK || isLast) {
       const gTask = JSON.parse(JSON.stringify({
         FN: `G_Chapter_Git_Main_${gTasks.length}.ps1`,
         data: 
-        `${tasks.join('\n')}\n`+
+        `${tasks.map(t => `./${t}`).join('\n')}\n`+
         `del G_Chapter_Git_Main_${gTasks.length}.ps1\n`+
         `timeout 5\n`+
         `${CHECK_TASK}\n`+
