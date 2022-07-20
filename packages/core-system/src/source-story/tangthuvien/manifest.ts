@@ -53,7 +53,7 @@ const groupAndIndex = async (manifest) => {
         language: manifest.language
       }),
       chapter: chItem,
-      max: 100000
+      max: 10000
     }))
     if (data?.group) {
       setGroupChapterData(data)
