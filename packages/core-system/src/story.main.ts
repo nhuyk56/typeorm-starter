@@ -16,12 +16,12 @@ const initStory = async (sitemapRow) => {
   const storyRepository = AppDataSource.getRepository(Story)
   console.log(`[initStory][${sitemapRow.index}]: ${sitemapRow.link}`)
   const item = await StoryUtil.getStoryFromSLink(sitemapRow.link)
-  // @todo: uniq item.id >> has json[item.id] >> edit/create
 
   const storiesFounded = await storyRepository.findBy({ id: item.id })
   let story = null
   if (storiesFounded?.length) {
-    story = storiesFounded.pop()
+    // story = storiesFounded.pop()
+    story = { id: item.id } /** update fields only */
     console.log(`${item.id} exist >> update`)
     const fieldsUpdate = [
       'sId',
@@ -44,7 +44,8 @@ const initStory = async (sitemapRow) => {
     ]
     fieldsUpdate.forEach(field => story[field] = item[field])
   } else {
-    story = new Story(item)
+    // story = new Story(item)
+    story = item
     console.log(`${item.id} not exist >> create`)
   }
   /** case create */
@@ -62,9 +63,10 @@ const main = async () => {
     var all = []
     for (const item of links) { /** DEBUG >> [links[0]] */
       all.push(initStory(item))
-      if (all.length === 1000) {
+      if (all.length === 100) {
         await Promise.all(all)
         all = []
+        // break /** for debug */
       }
     }
     await Promise.all(all)
