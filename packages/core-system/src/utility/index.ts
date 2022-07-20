@@ -85,7 +85,7 @@ const upFolder2Git = async (option) => {
   const pushMessage = shell.exec(warnCLI(`git push -f --set-upstream origin ${option.brand}`), getShellOption(option.folderPath))
   if (pushMessage.code === 0) {
     if (option.removeFolder) {
-      shell.exec(warnCLI(`rm -rf "${option.folderPath}"`))
+      shell.exec(warnCLI(`rm -rf "${option.folderPath}"`), getShellOption(process.env.Temp))
     } else {
       shell.exec(warnCLI(`rm -rf "${path.join(option.folderPath, '.git')}"`), getShellOption(option.folderPath))
     }
