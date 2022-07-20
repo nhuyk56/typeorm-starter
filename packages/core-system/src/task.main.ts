@@ -102,10 +102,8 @@ const chapterGitMain = () => {
   const getgroupFolderPath = getGroupFolderPath()
   let tasks = [], gTasks = []
   const chapterGroups = readDir(getgroupFolderPath).filter(groupName => !groupName.includes('.json'))
-  const MAXTASK = chapterGroups.length > 15  ? Math.round(chapterGroups.length/15) : 15
-  const CHECK_TASK = Array.from(
-    Array(MAXTASK + 2).keys()
-  ).map(t => `if (Test-Path -Path G_Chapter_Git_Main_${t}.ps1 -PathType Leaf) { exit }`).join('\n')
+  const MAXTASK = chapterGroups.length > 15  ? Math.round(chapterGroups.length/15) : 1
+  const CHECK_TASK = `if (Test-Path -Path G_Chapter_Git_Main_* -PathType Leaf) { exit }\n`
   chapterGroups.forEach(groupName => {
     console.log('task:', groupName)
     const FN = groupName + '.ps1'
