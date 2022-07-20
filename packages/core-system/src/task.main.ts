@@ -151,10 +151,7 @@ const init = async () => {
     'story:main': storyMain,
     'manifest:main': manifestMain,
     'chapter:main': chapterMain,
-    'chapter:git:main': chapterGitMain,
-
-    'manifest:git:main': storyMain,
-    'task:main': storyMain,
+    'chapter:git:main': chapterGitMain
   }
 
   if (scriptKeys[scriptKey]) {
