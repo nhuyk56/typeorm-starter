@@ -102,14 +102,15 @@ const chapterGitMain = () => {
   const getgroupFolderPath = getGroupFolderPath()
   let tasks = [], gTasks = []
   const chapterGroups = readDir(getgroupFolderPath).filter(groupName => !groupName.includes('.json'))
-  const MAXTASK = Math.round(chapterGroups.length/15)
+  const MAXTASK = chapterGroups.length > 15  ? Math.round(chapterGroups.length/15) : 15
   const CHECK_TASK = Array.from(
     Array(MAXTASK + 2).keys()
   ).map(t => `if (Test-Path -Path G_Chapter_Git_Main_${t}.ps1 -PathType Leaf) { exit }`).join('\n')
   chapterGroups.forEach(groupName => {
     console.log('task:', groupName)
+    const FN = groupName + '.ps1'
     setTaskData({
-      FN: groupName + '.ps1',
+      FN,
       data: 
       `Set-Location -Path ${process.cwd()}\n`+
       `npm run chapter:git:main gfn=${groupName}.json gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
@@ -118,7 +119,7 @@ const chapterGitMain = () => {
     })
     
     /** group task */
-    tasks.push(`${groupName}.ps1`)
+    tasks.push(FN)
     const isLast = chapterGroups[chapterGroups.length-1] === groupName
     if (tasks.length >= MAXTASK || isLast) {
       const gTask = JSON.parse(JSON.stringify({
@@ -129,7 +130,7 @@ const chapterGitMain = () => {
         `timeout 5\n`+
         `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
-        // `npm run task:main scriptKey=manifest:git:main\n`+ /** END */
+        // `npm run task:main scriptKey=manifest:git:main\n`+ /** DONT NEED THIS */
         `npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
         `exit`
       }))

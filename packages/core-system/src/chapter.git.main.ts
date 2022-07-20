@@ -26,6 +26,8 @@ const init = async () => {
   const groupFN = args.gfn?.split('.')?.shift()
   const groupFNPath = getGroupChapterpath({ groupFN })
 
+  const chaptersInFolder = readDir(groupFNPath)
+
   console.log('UPFOLDER2GIT', groupFNPath)
   const brandRaw = await upFolder2Git({
     folderPath: groupFNPath,
@@ -35,7 +37,7 @@ const init = async () => {
     removeFolder: true /** live */
   })
 
-  readDir(groupFNPath).forEach(chapterId => {
+  chaptersInFolder.forEach(chapterId => {
     console.log(`${brandRaw}${chapterId}`) /** DEBUG */
     setChapterGitData({ FN: chapterId, data: `${brandRaw}${chapterId}` })
   })

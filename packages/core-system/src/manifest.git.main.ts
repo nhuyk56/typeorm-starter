@@ -43,6 +43,7 @@ const init = async (storyId) => {
     const chapterGitPath = getChapterGitPath({ FN: ch.id })
     if (isExistsFN(chapterGitPath)) {
       ch.contentPathRaw = readDataFN(chapterGitPath)
+      delete ch.groupFN
       isDeleteFN(chapterGitPath)
     }
   })
