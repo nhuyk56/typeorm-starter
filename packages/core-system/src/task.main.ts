@@ -100,7 +100,7 @@ const chapterMain = () => {
 
 const chapterGitMain = () => {
   const getgroupFolderPath = getGroupFolderPath()
-  let tasks = [], gTasks = []
+  let tasks = [], gIndex = 0
   const chapterGroups = readDir(getgroupFolderPath).filter(groupName => !groupName.includes('.json'))
   const MAXTASK = chapterGroups.length > 15  ? Math.round(chapterGroups.length/15) : 1
   const CHECK_TASK = `if (Test-Path -Path G_Chapter_Git_Main_* -PathType Leaf) { exit }\n`
@@ -121,10 +121,10 @@ const chapterGitMain = () => {
     const isLast = chapterGroups[chapterGroups.length-1] === groupName
     if (tasks.length >= MAXTASK || isLast) {
       const gTask = JSON.parse(JSON.stringify({
-        FN: `G_Chapter_Git_Main_${gTasks.length}.ps1`,
+        FN: `G_Chapter_Git_Main_${gIndex}.ps1`,
         data: 
         `${tasks.map(t => `./${t}`).join('\n')}\n`+
-        `del G_Chapter_Git_Main_${gTasks.length}.ps1\n`+
+        `del G_Chapter_Git_Main_${gIndex}.ps1\n`+
         `timeout 5\n`+
         `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
@@ -134,6 +134,8 @@ const chapterGitMain = () => {
       }))
       setTaskData(gTask)
       tasks = []
+      ++gIndex
+      
       execSync(`start ${gTask.FN}`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
     }
   })
