@@ -124,7 +124,7 @@ const chapterGitMain = () => {
         FN: `G_Chapter_Git_Main_${gIndex}.ps1`,
         data: 
         `${tasks.map(t => `./${t}`).join('\n')}\n`+
-        `timeout ${(5 + gIndex)}\n`+
+        `timeout ${gIndex}\n`+
         `del G_Chapter_Git_Main_${gIndex}.ps1\n`+
         `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
