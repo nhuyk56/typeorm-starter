@@ -124,7 +124,7 @@ const chapterGitMain = () => {
         FN: `G_Chapter_Git_Main_${gIndex}.ps1`,
         data: 
         `${tasks.map(t => `./${t}`).join('\n')}\n`+
-        `timeout ${gIndex}\n`+
+        `timeout ${!gIndex ? 10 : 0}\n`+
         `del G_Chapter_Git_Main_${gIndex}.ps1\n`+
         `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
@@ -135,7 +135,6 @@ const chapterGitMain = () => {
       setTaskData(gTask)
       tasks = []
       ++gIndex
-      
       execSync(`start ${gTask.FN}`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
     }
   })
