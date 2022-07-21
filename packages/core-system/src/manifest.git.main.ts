@@ -92,20 +92,22 @@ const init = async (storyId) => {
 
 const main = async () => {
   if (!args.gitSSH) throw new Error('Missing git SSH')
-  const storiesId = readDir(getManifestPath())
-  var all = []
-  for (const storyId of storiesId) {
-    all.push(init(storyId))
-    if (all.length === 100) {
-      await Promise.all(all)
-      all = []
-    }
-  }
-  await Promise.all(all)
+  if (!args.storyId) throw new Error('Missing storyId')
+  await init(args.storyId)
+  // const storiesId = readDir(getManifestPath())
+  // var all = []
+  // for (const storyId of storiesId) {
+  //   all.push(init(storyId))
+  //   if (all.length === 100) {
+  //     await Promise.all(all)
+  //     all = []
+  //   }
+  // }
+  // await Promise.all(all)
 }
 
 AppDataSource.initialize().then(main).catch(error => {
   console.log(error)
 })
 
-// npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git
+// npm run manifest:git:main storyId=123 gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git

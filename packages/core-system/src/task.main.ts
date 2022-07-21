@@ -16,7 +16,8 @@ import {
   getTaskFolderPath,
   getTaskPath,
   setTaskData,
-  getGroupFolderPath
+  getGroupFolderPath,
+  getManifestPath
 } from './utility/index'
 
 // defined
@@ -99,9 +100,9 @@ const chapterMain = () => {
 }
 
 const chapterGitMain = () => {
-  const getgroupFolderPath = getGroupFolderPath()
+  const groupFolderPath = getGroupFolderPath()
   let tasks = [], gIndex = 0
-  const chapterGroups = readDir(getgroupFolderPath).filter(groupName => !groupName.includes('.json'))
+  const chapterGroups = readDir(groupFolderPath).filter(groupName => !groupName.includes('.json'))
   const MAXTASK = chapterGroups.length > 15  ? Math.round(chapterGroups.length/15) : 1
   const CHECK_TASK = `if (Test-Path -Path G_Chapter_Git_Main_* -PathType Leaf) { exit }\n`
   chapterGroups.forEach((groupName) => {
@@ -128,8 +129,52 @@ const chapterGitMain = () => {
         `del G_Chapter_Git_Main_${gIndex}.ps1\n`+
         `${CHECK_TASK}\n`+
         `Set-Location -Path ${process.cwd()}\n`+
+        `npm run task:main scriptKey=manifest:git:main\n`+
+        // `npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+ /** UPDATE FOLLOW */
+        `exit`
+      }))
+      setTaskData(gTask)
+      tasks = []
+      ++gIndex
+      execSync(`start ${gTask.FN}`, { stdio: 'pipe', cwd: getTaskFolderPath(), shell: 'cmd.exe' })
+    }
+  })
+}
+
+const manifestGitMain = () => {
+  const manifestPath = getManifestPath()
+  let tasks = [], gIndex = 0
+  const manifestTasks = readDir(manifestPath)
+  console.log(manifestTasks)
+  const MAXTASK = manifestTasks.length > 15  ? Math.round(manifestTasks.length/15) : 1
+  const CHECK_TASK = `if (Test-Path -Path G_Manifest_Git_Main_* -PathType Leaf) { exit }\n`
+  manifestTasks.forEach((storyId) => {
+    console.log('task => storyId:', storyId)
+    const FN = storyId + '.ps1'
+    setTaskData({
+      FN,
+      data: 
+      `Set-Location -Path ${process.cwd()}\n`+
+      `npm run manifest:git:main storyId=${storyId} gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
+      `Set-Location -Path ${getTaskFolderPath()}\n`+
+      `del ${storyId}.ps1\n`
+    })
+    
+    /** group task */
+    tasks.push(FN)
+    const isLast = manifestTasks[manifestTasks.length-1] === storyId
+    if (tasks.length >= MAXTASK || isLast) {
+      const gTask = JSON.parse(JSON.stringify({
+        FN: `G_Manifest_Git_Main_${gIndex}.ps1`,
+        data: 
+        `${tasks.map(t => `./${t}`).join('\n')}\n`+
+        `timeout ${!gIndex ? 10 : 0}\n`+
+        `del G_Manifest_Git_Main_${gIndex}.ps1\n`+
+        `${CHECK_TASK}\n`+
+        `Set-Location -Path ${process.cwd()}\n`+
+        `echo "finish scope 1"`+
         // `npm run task:main scriptKey=manifest:git:main\n`+ /** DONT NEED THIS */
-        `npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
+        // `npm run manifest:git:main gitSSH=git@github.com----nhuyk56:nhuyk56/SyncStorage1.git\n`+
         `exit`
       }))
       setTaskData(gTask)
@@ -150,7 +195,8 @@ const init = async () => {
     'story:main': storyMain,
     'manifest:main': manifestMain,
     'chapter:main': chapterMain,
-    'chapter:git:main': chapterGitMain
+    'chapter:git:main': chapterGitMain,
+    'manifest:git:main': manifestGitMain
   }
 
   if (scriptKeys[scriptKey]) {
