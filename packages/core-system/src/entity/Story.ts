@@ -1,7 +1,9 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm";
 
 @Entity()
+
 export class Story {
+  /* ["siteName:hashName"] */
   @PrimaryColumn()
   id: string;
 
@@ -14,7 +16,7 @@ export class Story {
   @Column()
   hashName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text", array: true })
   hashNameSite: string;
 
   @Column()
@@ -85,6 +87,9 @@ export class Story {
 
   @Column({ nullable: true })
   insideChaptersContentLength: number;
+
+  @Column({ nullable: true, type: "text", array: true })
+  siteChaptersLength: number;
 
   @Column()
   outsideSrc: string;

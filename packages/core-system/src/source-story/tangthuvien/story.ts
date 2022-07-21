@@ -28,6 +28,7 @@ const storeField = {
   outsideChaptersLength: o => Number(o.$('#j-bookCatalogPage')?.text()?.match(/\d+/g)?.[0] || 0),
   insideChaptersLength: o => null,
   insideChaptersContentLength: o => null,
+  siteChaptersLength: o => null,
   outsideSrc: o => o.SLink,
   outsideSVC: o => 'tangthuvien',
   language: o => 'vi',
