@@ -16,7 +16,8 @@ import {
   setManifestStoryData,
   setChapterGitData,
   getHash,
-  isDeleteFN
+  isDeleteFN,
+  setErrorData
 } from './utility/index'
 
 const args = require('args-parser')(process.argv)
@@ -39,14 +40,24 @@ const init = async (storyId) => {
   const rawStory = readDataFN(manifestStoryPath)
   const story = JSON.parse(rawStory)
   const chapters = JSON.parse(JSON.stringify(story)).chapters
+  let hasUpdateChapter = false
   chapters.forEach(ch => {
     const chapterGitPath = getChapterGitPath({ FN: ch.id })
     if (isExistsFN(chapterGitPath)) {
       ch.contentPathRaw = readDataFN(chapterGitPath)
       delete ch.groupFN
       isDeleteFN(chapterGitPath)
+      hasUpdateChapter = true
     }
   })
+  if (!hasUpdateChapter) {
+    console.log(`[MANIFEST.GIT]: ${manifestStoryPath}, NO UPDATE CHAPTER >> OUT`)
+    setErrorData({
+      FN: `${storyId}.${new Date().getTime()}.txt`,
+      data: `[MANIFEST.GIT]: ${manifestStoryPath}, NO UPDATE CHAPTER >> OUT`,
+    })
+    return
+  }
   const storyRepository = AppDataSource.getRepository(Story)
   const storiesDB = await storyRepository.findBy({ id: storyId })
   const storyDB = storiesDB?.pop()
@@ -94,16 +105,6 @@ const main = async () => {
   if (!args.gitSSH) throw new Error('Missing git SSH')
   if (!args.storyId) throw new Error('Missing storyId')
   await init(args.storyId)
-  // const storiesId = readDir(getManifestPath())
-  // var all = []
-  // for (const storyId of storiesId) {
-  //   all.push(init(storyId))
-  //   if (all.length === 100) {
-  //     await Promise.all(all)
-  //     all = []
-  //   }
-  // }
-  // await Promise.all(all)
 }
 
 AppDataSource.initialize().then(main).catch(error => {

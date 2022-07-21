@@ -193,6 +193,7 @@ const setChapterGitData = option => {
 }
 
 const getTaskFolderPath = () => genLocalFolder('task')
+const getErrorFolderPath = () => genLocalFolder('error')
 
 const getTaskPath = o => {
   return path.join(genLocalFolder('task'), o.FN)
@@ -208,6 +209,15 @@ const setTaskData = o => {
    return true 
 }
 
+const setErrorData = o => {
+  try {
+    fs.writeFileSync(path.join(getErrorFolderPath(), o.FN), o.data, 'utf-8')
+  } catch (error) {
+    console.log('setErrorData', error)
+    return false 
+  }
+   return true 
+}
 
 export {
   axiosProxy,
@@ -238,5 +248,6 @@ export {
   getTaskPath,
   setTaskData,
   getTaskFolderPath,
-  getGroupFolderPath
+  getGroupFolderPath,
+  setErrorData
 }
