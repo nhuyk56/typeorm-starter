@@ -83,14 +83,14 @@ const main = async () => {
   const groupChapterpath = getGroupChapterpath({ groupFN })
   const files = readDir(groupChapterpath)
 
-  const speechAuth = await getSpeechAuth()
+  const speechAuth = await forceFunction(() => getSpeechAuth())
   console.log('STEP1', speechAuth)
   
   for (const file of files) {
     console.time(file)
     console.log('STEP2', 'file', file)
     const content = readDataFN(`${groupChapterpath}/${file}`)
-    const cmfr = await getContentModelForReader({ headers: speechAuth, content })
+    const cmfr = await forceFunction(() => getContentModelForReader({ headers: speechAuth, content }))
     console.log('STEP2', 'items', cmfr.items?.length)
     let sentenceModels = [], length = 0
     let audio = 'data:audio/mpeg;base64,'
