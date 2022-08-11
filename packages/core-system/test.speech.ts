@@ -98,7 +98,7 @@ const main = async () => {
       all.push(forceFunction(() => GetSpeech(
         JSON.parse(
           JSON.stringify({
-            preferredVoice: 'Female',
+            preferredVoice: 'Male',
             sentenceModels,
             headers: cmfr.headers
           })
@@ -108,7 +108,9 @@ const main = async () => {
       sentenceModels = []
       length = 0
       if (all.length === 5) {
+        console.timeLog('speech')
         const base64Arr = await Promise.all(all)
+        console.timeLog('speech')
         audio += base64Arr.join('\n')
         all = []
       }
