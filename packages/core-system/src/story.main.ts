@@ -63,11 +63,11 @@ const main = async () => {
     var all = []
     for (const item of links) { /** DEBUG >> [links[0]] */
       all.push(initStory(item))
-      if (all.length === 100) {
+      if (all.length === 60) {
         await Promise.all(all)
         all = []
+        break /** for debug */
       }
-      // break /** for debug */
     }
     await Promise.all(all)
   } else {
