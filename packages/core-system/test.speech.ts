@@ -113,7 +113,7 @@ const main = async () => {
         console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
-        if (isLast || all.length === 10) {
+        if (isLast || all.length === 5) {
           console.timeLog(file)
           const base64Arr = await Promise.all(all)
           console.log(`base64Arr length`, base64Arr.length)
