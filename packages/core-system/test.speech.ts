@@ -114,7 +114,7 @@ const main = async () => {
         console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
-        if (all.length === 1) {
+        if (all.length === 10) {
           console.timeLog(file)
           const base64Arr = await Promise.all(all)
           console.timeLog(file)
