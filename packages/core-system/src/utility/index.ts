@@ -21,7 +21,7 @@ const forceFunction = async callback => {
     try {
       return await callback()
     } catch (error) {
-      console.log('try times', --times)
+      console.log(error?.message, '[try times]', --times)
     }
   }
   throw new Error(callback)
