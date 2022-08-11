@@ -116,6 +116,7 @@ const main = async () => {
         if (isLast || all.length === 10) {
           console.timeLog(file)
           const base64Arr = await Promise.all(all)
+          console.log(base64Arr)
           console.timeLog(file)
           audio += base64Arr.join('\n')
           all = []
