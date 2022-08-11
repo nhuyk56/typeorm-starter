@@ -2,7 +2,7 @@
 // http://httpbin.org/get?answer=42
 // curl https://api.myip.com -x http://[2001:19f0:4400:6493:5400:04ff:fe0b:3e77]:32022
 import fs from 'fs'
-import { axiosProxy, readDataFN, forceFunction, getGroupChapterpath, readDir } from './src/utility/index'
+import { axiosProxy, readDataFN, forceFunction, getGroupChapterpath, readDir, axiosNormal } from './src/utility/index'
 const getSpeechAuth = async () => {
 const res = {}
  const { data } = await axiosProxy.get('https://www.onenote.com/learningtools', { timeout: 5000 })
@@ -116,7 +116,7 @@ const main = async () => {
         if (isLast || all.length === 10) {
           console.timeLog(file)
           const base64Arr = await Promise.all(all)
-          console.log(base64Arr)
+          console.log(`base64Arr length`, base64Arr.length)
           console.timeLog(file)
           audio += base64Arr.join('\n')
           all = []
