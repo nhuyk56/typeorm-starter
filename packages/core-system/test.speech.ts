@@ -5,7 +5,7 @@ import fs from 'fs'
 import { axiosProxy, readDataFN, forceFunction, getGroupChapterpath, readDir } from './src/utility/index'
 const getSpeechAuth = async () => {
 const res = {}
- const { data } = await axiosProxy.get('https://www.onenote.com/learningtools')
+ const { data } = await axiosProxy.get('https://www.onenote.com/learningtools', { timeout: 5000 })
   const rawParams = data.match(/var (SessionId|Canary) = "(.*?)";/gm)
   if (rawParams?.length) {
     rawParams.forEach(rawParam => {
@@ -48,7 +48,7 @@ const getContentModelForReader = async ({ headers, content }) => {
       "EnableSegmentation": true
     }
   }
-  const { data } = await axiosProxy.post(api, payload, { headers })
+  const { data } = await axiosProxy.post(api, payload, { headers, timeout: 10000 })
   const headerToken = data?.meta?.sessionToken && { authorization: `MS-SessionToken ${data?.meta?.sessionToken}` }
   const items = (data?.data || []).map(item => ({
     "t": item?.t,
@@ -74,18 +74,17 @@ const GetSpeech = async ({ preferredVoice, sentenceModels, headers }) => {
       "useBrowserSpecifiedDialect": true
     }
   }
-  const { data } = await axiosProxy.post(api, payload, { headers })
+  const { data } = await axiosProxy.post(api, payload, { headers, timeout: 10000 })
   return data?.data?.sb.map(it => it?.ad?.replace('data:audio/mpeg;base64,', '')).join('\n')
 }
 
-const main = async () => {
-  const groupFN = '1658321277991-49'
-  const groupChapterpath = getGroupChapterpath({ groupFN })
-  const files = readDir(groupChapterpath)
-
+const main = async () => {  
   const speechAuth = await forceFunction(() => getSpeechAuth())
   console.log('STEP1', speechAuth)
   
+  const groupFN = '1658321277991-49'
+  const groupChapterpath = getGroupChapterpath({ groupFN })
+  const files = readDir(groupChapterpath)
   for (const file of files) {
     console.time(file)
     console.log('STEP2', 'file', file)
@@ -114,7 +113,7 @@ const main = async () => {
         console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
-        if (all.length === 10) {
+        if (isLast || all.length === 10) {
           console.timeLog(file)
           const base64Arr = await Promise.all(all)
           console.timeLog(file)
@@ -125,6 +124,7 @@ const main = async () => {
     }
     fs.writeFileSync(`${file}.base64.txt`, audio)
     console.timeEnd(file)
+    console.log(`END ${file}`)
   }
 }
 
