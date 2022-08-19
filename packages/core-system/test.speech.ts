@@ -120,12 +120,11 @@ const main = async () => {
             })
           )
         )))
-        console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
+        // console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
         console.timeLog(logId, 'STEP4', `${all.length} (text parts prepare)`)
         if (isLast || all.length === 5) {
-          console.timeLog(logId)
           console.timeLog(logId, 'STEP4', `${all.length} (text parts comparing)`)
           const base64Arr = await Promise.all(all)
           console.timeLog(logId, 'STEP4', `${all.length} text parts >> ${base64Arr.length} audio parts [success]`)
