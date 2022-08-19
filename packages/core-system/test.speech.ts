@@ -78,19 +78,29 @@ const GetSpeech = async ({ preferredVoice, sentenceModels, headers }) => {
   return data?.data?.sb.map(it => it?.ad?.replace('data:audio/mpeg;base64,', '')).join('\n')
 }
 
-const main = async () => {  
-  const speechAuth = await forceFunction(() => getSpeechAuth())
-  console.log('STEP1', speechAuth)
-  
-  const groupFN = '1658321277991-49'
-  const groupChapterpath = getGroupChapterpath({ groupFN })
-  const files = readDir(groupChapterpath)
-  for (const file of files) {
-    console.time(file)
-    console.log('STEP2', 'file', file)
-    const content = readDataFN(`${groupChapterpath}/${file}`)
-    const cmfr = await forceFunction(() => getContentModelForReader({ headers: speechAuth, content }))
-    console.log('STEP2', 'items', cmfr.items?.length)
+const main = async () => {
+  let axiosStoryInfo = await axiosNormal.get('https://raw.githubusercontent.com/nhuyk56/SyncStorage1/15cd37c3eeb0d96832cd3585da185d40/index.json')
+  const storyInfo = axiosStoryInfo.data
+  const chapters = storyInfo?.chapters || []
+  let position = 0
+  for (const chapter of chapters) {
+    const logId = `${++position}/${chapters.length}`
+    console.time(logId)
+    console.timeLog(logId, 'INIT: select chapter', chapter?.name)
+
+    console.timeLog(logId, 'STEP1: get auth')
+    const speechAuth = await forceFunction(() => getSpeechAuth())
+    console.timeLog(logId, 'STEP1: get auth [success]',speechAuth)
+
+    console.timeLog(logId, 'STEP2', 'get content')
+    const axiosChapter = await axiosNormal.get(chapter.contentPathRaw)
+    const dataChapter = axiosChapter.data
+    console.timeLog(logId, 'STEP2', 'get content [success]', `length: ${ dataChapter.length }`)
+
+    console.timeLog(logId, 'STEP3', 'get content model forreader')
+    const cmfr = await forceFunction(() => getContentModelForReader({ headers: speechAuth, content: dataChapter }))
+    console.timeLog(logId, 'STEP3', 'get content model forreader [success]', `length: ${ cmfr.items?.length }`)
+
     let sentenceModels = [], length = 0
     let audio = 'data:audio/mpeg;base64,'
     let all = []
@@ -113,19 +123,20 @@ const main = async () => {
         console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
+        console.timeLog(logId, 'STEP4', `${all.length} (text parts prepare)`)
         if (isLast || all.length === 5) {
-          console.timeLog(file)
+          console.timeLog(logId)
+          console.timeLog(logId, 'STEP4', `${all.length} (text parts comparing)`)
           const base64Arr = await Promise.all(all)
-          console.log(`base64Arr length`, base64Arr.length)
-          console.timeLog(file)
-          audio += base64Arr.join('\n')
+          console.timeLog(logId, 'STEP4', `${all.length} text parts >> ${base64Arr.length} audio parts [success]`)
+          audio += base64Arr.join('')
           all = []
         }
       }
     }
-    fs.writeFileSync(`${file}.base64.txt`, audio)
-    console.timeEnd(file)
-    console.log(`END ${file}`)
+    fs.writeFileSync(`${logId}.${chapter.id}.base64.txt`, audio)
+    console.timeLog(logId, 'END')
+    console.timeEnd(logId)
   }
 }
 
