@@ -133,7 +133,7 @@ const main = async () => {
         }
       }
     }
-    fs.writeFileSync(`${logId}.${chapter.id}.base64.txt`, audio)
+    fs.writeFileSync(`./audios/${logId}.${chapter.id}.base64.txt`, audio)
     console.timeLog(logId, 'END')
     console.timeEnd(logId)
   }
