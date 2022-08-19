@@ -4,7 +4,7 @@ const fs = require('fs')
 
 const proxyOptions = `socks5://45.77.250.86:9050`;
 const agent = new SocksProxyAgent(proxyOptions);
-let socket = new ws('wss://ws019.qidianaudio.com/?language=vi', [], {
+let socket = new ws('wss://ws015.qidianaudio.com/?language=vi', [], {
   httpAgent: agent,
   httpsAgent: agent,
   agent,
