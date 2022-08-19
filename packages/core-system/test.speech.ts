@@ -133,6 +133,7 @@ const main = async () => {
         }
       }
     }
+    fs.mkdirSync('./audios/', { recursive: true })
     fs.writeFileSync(`./audios/${positionChapter}.${chapter.id}.base64.txt`, audio)
     console.timeLog(logId, 'END')
     console.timeEnd(logId)
