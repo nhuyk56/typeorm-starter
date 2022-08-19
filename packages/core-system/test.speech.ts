@@ -82,9 +82,9 @@ const main = async () => {
   let axiosStoryInfo = await axiosNormal.get('https://raw.githubusercontent.com/nhuyk56/SyncStorage1/15cd37c3eeb0d96832cd3585da185d40/index.json')
   const storyInfo = axiosStoryInfo.data
   const chapters = storyInfo?.chapters || []
-  let position = 0
+  let positionChapter = 0
   for (const chapter of chapters) {
-    const logId = `${++position}/${chapters.length}`
+    const logId = `${++positionChapter}/${chapters.length}`
     console.time(logId)
     console.timeLog(logId, 'INIT: select chapter', chapter?.name)
 
@@ -123,17 +123,17 @@ const main = async () => {
         // console.table({ STEP3: i, itemsLength: sentenceModels.length, contentLength: length })
         sentenceModels = []
         length = 0
-        console.timeLog(logId, 'STEP4', `${all.length} (text parts prepare)`)
+        console.timeLog(logId, 'STEP4', `${i}/${cmfr?.items?.length}`, `${all.length} (text parts prepare)`)
         if (isLast || all.length === 5) {
-          console.timeLog(logId, 'STEP4', `${all.length} (text parts comparing)`)
+          console.timeLog(logId, 'STEP4', `${i}/${cmfr?.items?.length}`, `${all.length} (text parts comparing)`)
           const base64Arr = await Promise.all(all)
-          console.timeLog(logId, 'STEP4', `${all.length} text parts >> ${base64Arr.length} audio parts [success]`)
+          console.timeLog(logId, 'STEP4', `${i}/${cmfr?.items?.length}`, `${all.length} text parts >> ${base64Arr.length} audio parts [success]`)
           audio += base64Arr.join('')
           all = []
         }
       }
     }
-    fs.writeFileSync(`./audios/${position}.${chapter.id}.base64.txt`, audio)
+    fs.writeFileSync(`./audios/${positionChapter}.${chapter.id}.base64.txt`, audio)
     console.timeLog(logId, 'END')
     console.timeEnd(logId)
   }
