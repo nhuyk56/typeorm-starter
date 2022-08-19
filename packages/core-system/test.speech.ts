@@ -74,7 +74,7 @@ const GetSpeech = async ({ preferredVoice, sentenceModels, headers }) => {
       "useBrowserSpecifiedDialect": true
     }
   }
-  const { data } = await axiosProxy.post(api, payload, { headers, timeout: 10000 })
+  const { data } = await axiosNormal.post(api, payload, { headers, timeout: 10000 })
   return data?.data?.sb.map(it => it?.ad?.replace('data:audio/mpeg;base64,', '')).join('\n')
 }
 
