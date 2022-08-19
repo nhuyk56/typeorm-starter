@@ -35,12 +35,14 @@ socket.on('message', message => {
       const fileName = `./mp3.${index}.txt`
       fs.writeFileSync(fileName, audioContent, { encoding: "utf8" })
       audioCTN.status = 0
+      console.timeEnd(`item-${index}`)
     }
   } else console.log(`[${index}/${items.length}]${item.command}: ${item.status}`)
   // if (item.command === 'receive_text') console.log(item.data)
   if (audioCTN.status === 0) {
     const candiate = items.find(c => !passed[String(c.id)])
     if (candiate) {
+      console.time(`item-${index + 1}`)
       const id = String(candiate.id)
       passed[id] = candiate
       socket.send(JSON.stringify(candiate))
@@ -57,5 +59,4 @@ socket.on('open', () => {
 socket.on('close', () => {
   audioCTN.status = -1
   console.log('connection end')
-  console.timeEnd('startTime')
 })
