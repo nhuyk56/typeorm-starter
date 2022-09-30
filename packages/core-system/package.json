@@ -33,6 +33,7 @@
     "chapter.read.main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/chapter.read.main",
     "task:main": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node ./src/task.main",
     "testproxy": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node testproxy.ts",
-    "test.speech": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node test.speech.ts"
+    "test.speech": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node test.speech.ts",
+    "test-viettel": "cross-env NODE_OPTIONS='--max-old-space-size=4096' ts-node test-viettel.ts"
   }
 }

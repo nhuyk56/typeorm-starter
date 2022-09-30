@@ -5,7 +5,7 @@ import fs from 'fs'
 import { axiosProxy, readDataFN, forceFunction, getGroupChapterpath, readDir, axiosNormal } from './src/utility/index'
 const getSpeechAuth = async () => {
 const res = {}
- const { data } = await axiosProxy.get('https://www.onenote.com/learningtools', { timeout: 5000 })
+ const { data } = await axiosNormal.get('https://www.onenote.com/learningtools', { timeout: 5000 })
   const rawParams = data.match(/var (SessionId|Canary) = "(.*?)";/gm)
   if (rawParams?.length) {
     rawParams.forEach(rawParam => {
@@ -48,7 +48,7 @@ const getContentModelForReader = async ({ headers, content }) => {
       "EnableSegmentation": true
     }
   }
-  const { data } = await axiosProxy.post(api, payload, { headers, timeout: 10000 })
+  const { data } = await axiosNormal.post(api, payload, { headers, timeout: 10000 })
   const headerToken = data?.meta?.sessionToken && { authorization: `MS-SessionToken ${data?.meta?.sessionToken}` }
   const items = (data?.data || []).map(item => ({
     "t": item?.t,
