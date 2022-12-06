@@ -63,7 +63,7 @@ const getContentModelForReader = async ({ headers, content }) => {
 }
 
 const GetSpeech = async (text) => {
-  const api = 'https://cxl-services.appspot.com/proxy?url=https://texttospeech.googleapis.com/v1beta1/text:synthesize&token=03ANYolqvK9d-rR9MThJQNFBZzVEDgbAcuLuQOfSiNHoEbqcBei8sYOFayZE4VmolJ9GclC6q2LqkBqrfSy6nSE0OREp6d4t8tbDJyTWux7lurGQ3dPssSIDjy8k7fZxo8u7luIqN4qnaxa3d6Pmq3KSHv-b8-TQY-SM7-rNk36QyAn9m_qry3I1xQ3qTeZnHKbGuvRMD8nd7Pv3H1QRytS_JN3T7mXTpYYx5JculCNrp8bESQl5jorzjMHYzHZqIf5w62jiyHPzpgvZlTAEjhlLvtaCUnWzVhP27L0TJL_nau6hN3M6qZ_JZPO0Yg38rAEXL6VuRLvlWg6FmGuzUwYxuZNVPczaJahhWJwdfWnLTS3c4mxx28GXUu1p3B6bbi7OUGdDIybOaw-bICYNKRTHdGSC_jMNHu9YKWUGD7NwQt39Vyp1Aw4jzU5tKYJVONV0di2BlpKCbbQsgph63hGZDSf7ZdX1G5DdYA25O1NorKlZHHxiEwW2aKzIrpwV6fwpJj8hkMA1vRMQRWX4rWL-CfMYtM_DiLDA'
+  const api = 'https://cxl-services.appspot.com/proxy?url=https://texttospeech.googleapis.com/v1beta1/text:synthesize&token=03AEkXODDuf2UEPODeEa1OOToA6AUQw2d1O1IS-ozVQl4uBQ-839f_daFO9_LpWnKq-cG_E0I-3tDW6p9hTrbGmotuUISqTimYF1ygpT5Cc_mImgSjLh-QgHELTGIMDql0dUWfOyMVujpt3UXVxEcz2QtnELadIPPuWbPunaa6ZB87t09BAljaYNxA4DAmEPiiVR28wFeNGWH7klptggxcc-Z_NOGi1pWBal972pTnzaQMrIbN2Szqh5Ex44mmQN0vFh5FitfBb8jsooGnuQuFC-eaVm0oVddVDl3rtuXg7ZV38do2M5UfJnqMxmNBqC9hk7X_ucc0At6yh0yUlMYcS7bDoDdw7kP-ZufX8HfkseEyJg4mCdyvsweitZ8gCOyZaZAJu3jjsSJKB4IPuAyMVYj7C6NcP3DNcL2GPK3O8WkoqJLt3nDsRKu3RI6DjjWx9C7qSG4I3zD5jWOexNEZer6JoDchKEnBd0AeQZsarDjgr8LqIxADh5picYUg5q_uUu1rwXC7IQljlzQjeoMu0rIbdeQULh_G1xsi0viVmYVtDN0jKK-GIks'
   const payload = {
     "input": {
       text
@@ -73,7 +73,7 @@ const GetSpeech = async (text) => {
       "name": "vi-VN-Wavenet-A"
     },
     "audioConfig": {
-      "audioEncoding": "LINEAR16",
+      "audioEncoding": "MP3",
       "pitch": 0,
       "speakingRate": 1
     }
